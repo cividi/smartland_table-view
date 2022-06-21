@@ -6,8 +6,7 @@ import vuetify from './vuetify'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-
-Vue.use(VueCompositionApi,VueAxios, axios)
+Vue.use(VueCompositionApi, VueAxios, axios)
 
 new Vue({
   vuetify,
