@@ -18,9 +18,9 @@ export default {
       accessToken: 'pk.eyJ1IjoiZ2VtZWluZGVzY2FuIiwiYSI6ImNrNXdqejRtMjAzaWwzbXBkbzQwejFsdDAifQ.-uuEzwv7CsbdJgDKLT6i9g',
       mapStyle: 'mapbox://styles/gemeindescan/cl379xy8d001614m7qrl9furx',
       viewState: {
-        latitude: 12.976387,
-        longitude: 77.571529,
-        zoom: 15,
+        latitude: 46.976387,
+        longitude: 8.571529,
+        zoom: 6,
         bearing: 0,
         pitch: 0,
       },
@@ -92,10 +92,22 @@ export default {
         longitude,
         pitch,
         bearing,
-        zoom: 12,
+        zoom: 10,
         transitionDuration: 3000,
       }
     }, 5000)
   },
 }
 </script>
+
+<style lang="scss">
+#map {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #e5e9ec;
+  overflow: hidden;
+}
+</style>
