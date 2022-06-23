@@ -9,7 +9,7 @@
 </template>
 <script>
 import VueDeckgl from 'vue-deck.gl'
-import { GeoJsonLayer } from '@deck.gl/layers'
+import { GeoJsonLayer, SolidPolygonLayer } from '@deck.gl/layers'
 import mapboxgl from 'mapbox-gl'
 
 export default {
@@ -22,34 +22,35 @@ export default {
       accessToken: 'pk.eyJ1IjoiZ2VtZWluZGVzY2FuIiwiYSI6ImNrNXdqejRtMjAzaWwzbXBkbzQwejFsdDAifQ.-uuEzwv7CsbdJgDKLT6i9g',
       mapStyle: 'mapbox://styles/gemeindescan/cl379xy8d001614m7qrl9furx',
       viewState: {
-        latitude: 46.976387,
-        longitude: 8.571529,
+        latitude: 46.92271073977435,
+        longitude: 7.373082645279086,
         zoom: 6,
         bearing: 0,
         pitch: 0,
       },
 
       pathData: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            properties: {},
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [8.533973693847656, 46.96291637146266],
-                  [8.614997863769531, 46.96291637146266],
-                  [8.614997863769531, 46.997348563073466],
-                  [8.533973693847656, 46.997348563073466],
-                  [8.533973693847656, 46.96291637146266],
-                ],
-              ],
-            },
-          },
-        ],
+        type: 'Feature',
+        geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [7.373082645279086, 46.92271073977435],
+              [7.373904713225365, 46.92308897771411],
+              [7.37483054879466, 46.922567674750034],
+              [7.374306792418967, 46.922228743183894],
+              [7.373929660979968, 46.92203451855106],
+              [7.373840373534961, 46.922021316279185],
+              [7.373753152777899, 46.92205728299517],
+              [7.373732933003192, 46.922047448582205],
+              [7.373082645279086, 46.92271073977435],
+            ],
+          ],
+        },
+        properties: {},
       },
+
+      polygonData: {},
     }
   },
 
@@ -64,12 +65,11 @@ export default {
         extruded: true,
         pointType: 'circle',
         lineWidthScale: 20,
-        lineWidthMinPixels: 2,
-        getFillColor: [160, 160, 180, 200],
+        lineWidthMinPixels: 5,
+        getFillColor: [255, 0, 0],
         getLineColor: (d) => colorToRGBArray(d.properties.color),
         getPointRadius: 100,
         getLineWidth: 1,
-        getElevation: 30,
       })
       return [paths]
     },
