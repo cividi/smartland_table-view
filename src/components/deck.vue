@@ -1,7 +1,5 @@
 <template>
   <div class="deck-container" ref="deckContainerRef">
-    {{ mapData }}
-
     <VueDeckgl :layers="layers" :viewState="viewState" @click="handleClick" @view-state-change="updateViewState">
       <template>
         <div id="map" ref="map"></div>
@@ -17,7 +15,7 @@ import mapboxgl from 'mapbox-gl'
 export default {
   name: 'VueDeck',
   props: {
-    mapData: Array,
+    mapData: Object,
   },
   components: {
     VueDeckgl,
