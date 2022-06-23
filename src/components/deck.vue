@@ -5,7 +5,7 @@
 </template>
 <script>
 import VueDeckgl from 'vue-deck.gl'
-import { PathLayer } from '@deck.gl/layers'
+import { GeoJsonLayer } from '@deck.gl/layers'
 import mapboxgl from 'mapbox-gl'
 
 export default {
@@ -25,30 +25,47 @@ export default {
         pitch: 0,
       },
 
-      pathData: [
-        {
-          path: [
-            [-122.4, 37.7],
-            [-122.5, 37.8],
-            [-122.6, 37.85],
-          ],
-          name: 'Richmond - Millbrae',
-          color: [255, 0, 0],
-        },
-      ],
+      pathData: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
+                [
+                  [8.533973693847656, 46.96291637146266],
+                  [8.614997863769531, 46.96291637146266],
+                  [8.614997863769531, 46.997348563073466],
+                  [8.533973693847656, 46.997348563073466],
+                  [8.533973693847656, 46.96291637146266],
+                ],
+              ],
+            },
+          },
+        ],
+      },
     }
   },
 
   computed: {
     layers() {
-      const paths = new PathLayer({
-        id: 'path-layer',
+      const paths = new GeoJsonLayer({
+        id: 'geojson-layer',
         data: this.pathData,
-        widthScale: 20,
-        widthMinPixels: 2,
-        getPath: (d) => d.path,
-        getColor: (d) => [255, 255, 0],
-        getWidth: (d) => 2,
+        pickable: true,
+        stroked: false,
+        filled: true,
+        extruded: true,
+        pointType: 'circle',
+        lineWidthScale: 20,
+        lineWidthMinPixels: 2,
+        getFillColor: [160, 160, 180, 200],
+        getLineColor: (d) => colorToRGBArray(d.properties.color),
+        getPointRadius: 100,
+        getLineWidth: 1,
+        getElevation: 30,
       })
       return [paths]
     },
@@ -102,7 +119,7 @@ export default {
 
 <style lang="scss">
 #map {
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
