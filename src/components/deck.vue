@@ -1,7 +1,11 @@
 <template>
-  <VueDeckgl :layers="layers" :viewState="viewState" @click="handleClick" @view-state-change="updateViewState">
-    <div id="map" ref="map"></div>
-  </VueDeckgl>
+  <div class="deck-container" ref="deckContainerRef">
+    <VueDeckgl :layers="layers" :viewState="viewState" @click="handleClick" @view-state-change="updateViewState">
+      <template>
+        <div id="map" ref="map"></div>
+      </template>
+    </VueDeckgl>
+  </div>
 </template>
 <script>
 import VueDeckgl from 'vue-deck.gl'

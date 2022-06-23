@@ -1,10 +1,14 @@
 <template>
   <v-app id="app">
-    <v-container fluid>
-      <VueDeck />
+    <v-container id="deck1" fluid>
+      <v-row>
+        <v-col><VueDeck /></v-col>
+      </v-row>
     </v-container>
-    <v-container>
-      <DatatableComponent />
+    <v-container id="table_container" fluid>
+      <v-row>
+        <v-col><DatatableComponent /></v-col>
+      </v-row>
     </v-container>
   </v-app>
 </template>
@@ -24,12 +28,16 @@ export default defineComponent({
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 0px;
+#deck1 {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  height: 60vh;
+}
+
+#table_container {
+  display: relative;
+  bottom: 0;
+  z-index: 3;
 }
 </style>
