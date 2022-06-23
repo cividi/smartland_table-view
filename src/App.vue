@@ -2,12 +2,12 @@
   <v-app id="app">
     <v-container id="deck1" fluid>
       <v-row>
-        <v-col><VueDeck /></v-col>
+        <v-col><VueDeck :mapData="tempMapData" /></v-col>
       </v-row>
     </v-container>
     <v-container id="table_container" fluid>
       <v-row>
-        <v-col><DatatableComponent /></v-col>
+        <v-col><DatatableComponent @updateData="tempMapData = $event" /></v-col>
       </v-row>
     </v-container>
   </v-app>
@@ -23,6 +23,11 @@ export default defineComponent({
   components: {
     DatatableComponent,
     VueDeck,
+  },
+  data() {
+    return {
+      tempMapData: [],
+    }
   },
 })
 </script>

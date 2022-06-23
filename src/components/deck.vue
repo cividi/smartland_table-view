@@ -1,5 +1,7 @@
 <template>
   <div class="deck-container" ref="deckContainerRef">
+    {{ mapData }}
+
     <VueDeckgl :layers="layers" :viewState="viewState" @click="handleClick" @view-state-change="updateViewState">
       <template>
         <div id="map" ref="map"></div>
@@ -14,6 +16,9 @@ import mapboxgl from 'mapbox-gl'
 
 export default {
   name: 'VueDeck',
+  props: {
+    mapData: Array,
+  },
   components: {
     VueDeckgl,
   },
@@ -76,7 +81,8 @@ export default {
     layers() {
       const paths = new GeoJsonLayer({
         id: 'geojson-layer',
-        data: this.pathData,
+        //data: this.pathData,
+        data: this.mapData,
         pickable: true,
         stroked: false,
         filled: true,

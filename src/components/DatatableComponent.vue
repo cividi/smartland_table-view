@@ -15,6 +15,7 @@
         class="elevation-1"
       >
       </v-data-table>
+      <button @click="updateData()">Update</button>
     </v-card>
   </div>
 </template>
@@ -41,6 +42,44 @@ export default {
         { text: 'Einzugsgebiet 5min', value: 'ptot_5' },
         { text: 'Einzugsgebiet 10min', value: 'ptot_10' },
         { text: 'Einzugsgebiet 15min', value: 'ptot_15' },
+      ],
+      testdata: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [7.373082645279086, 46.92271073977435],
+                [7.373904713225365, 46.92308897771411],
+                [7.37483054879466, 46.922567674750034],
+                [7.374306792418967, 46.922228743183894],
+                [7.373929660979968, 46.92203451855106],
+                [7.373840373534961, 46.922021316279185],
+                [7.373753152777899, 46.92205728299517],
+                [7.373732933003192, 46.922047448582205],
+                [7.373082645279086, 46.92271073977435],
+              ],
+            ],
+          },
+          properties: {},
+        },
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [
+              [
+                [7.37087148808481, 46.92170893120651],
+                [7.371999287420623, 46.922139196536556],
+                [7.372574000539433, 46.921432267371635],
+                [7.371456621720615, 46.92110618750734],
+                [7.37087148808481, 46.92170893120651],
+              ],
+            ],
+          },
+          properties: {},
+        },
       ],
     }
   },
@@ -73,6 +112,10 @@ export default {
           //  this.numberOfPages = response.data.totalPages
           this.loading = false
         })
+    },
+
+    updateData() {
+      this.$emit('updateData', this.testdata)
     },
   },
   //this will trigger in the onReady State
