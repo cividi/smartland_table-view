@@ -5,6 +5,7 @@ import vuetify from './vuetify'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+//import { createPinia, PiniaVuePlugin } from 'pinia'
 
 Vue.use(VueCompositionApi, VueAxios, axios)
 
