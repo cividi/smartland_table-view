@@ -1,8 +1,10 @@
 <template>
   <v-app id="app">
-    <v-container>
+    <v-container fluid class="fluid-background">
       <VueDeck />
-      <DatatableComponent />
+    </v-container>
+    <v-container>
+      <!-- <DatatableComponent /> -->
     </v-container>
   </v-app>
 </template>
