@@ -16,6 +16,7 @@ export default {
   name: 'VueDeck',
   props: {
     mapData: Object,
+    SelFeature: Object,
   },
   components: {
     VueDeckgl,

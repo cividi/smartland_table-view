@@ -7,6 +7,7 @@
       </v-card-title>
       <v-data-table
         @current-items="getFiltered"
+        @click:row="clickedRow"
         dense
         :page="page"
         :pageCount="numberOfPages"
@@ -136,7 +137,16 @@ export default {
     getFiltered(e) {
       this.geoArray = e.map((obj) => obj._geojson)
       console.log(this.geoArray) //output the filtered items
-      //this.$emit('updateData', e.values('_geojson'))
+    },
+
+    clickedRow(e) {
+      console.log(e) //output the filtered items
+      this.$emit('rowSelect', '')
+
+      // Json.parse('"{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[7.292724985126278,47.10542403346226],[7.293457995648748,47.105667138601575],[7.294181119718246,47.10482842651928],[7.294103949015508,47.10478412777309],[7.293627810481179,47.10437188033611],[7.292724985126278,47.10542403346226]]]},"properties":{}}"'
+
+      // check why row select returns nasty strings
+      
     },
   },
   //this will trigger in the onReady State
