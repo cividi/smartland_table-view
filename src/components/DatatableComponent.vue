@@ -8,15 +8,44 @@
       <v-data-table
         @current-items="getFiltered"
         @click:row="clickedRow"
-        dense
+        
         :page="page"
         :pageCount="numberOfPages"
         :headers="headers"
-        :items="passengers"
+        :items="filteredParcels"
         :loading="loading"
         :search="search"
         class="elevation-1"
       >
+          <template v-slot:header.nutzungspl="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small>
+                    mdi-filter
+                  </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <v-text-field
+                  v-model="parcelZone"
+                  class="pa-4"
+                  type="text"
+                  label="Enter the search term"
+                  :autofocus="true"
+                ></v-text-field>
+                <v-btn
+                  @click="parcelZone = ''"
+                  small
+                  text
+                  color="primary"
+                  class="ml-2 mb-2"
+                >Clean</v-btn>
+              </div>
+            </v-menu>
+          </template>
+    </v-data-table>
       </v-data-table>
     </v-card>
   </div>
@@ -28,12 +57,13 @@ export default {
   name: 'DatatableComponent',
   data() {
     return {
+      parcelZone: '',      
       geoArray: [],
       search: '',
       page: 1,
-      totalPassengers: 0,
+      totalParcels: 0,
       numberOfPages: 5,
-      passengers: [],
+      parcels: [],
       loading: true,
       options: {},
       AuthStr:
@@ -46,6 +76,11 @@ export default {
         { text: 'Einzugsgebiet 10min', value: 'ptot_10' },
         { text: 'Einzugsgebiet 15min', value: 'ptot_15' },
       ],
+      filters: {
+        Flaeche: ['ddd'],
+        ptot_5: [],
+        ptot_10: [],
+      },
       testdata: {
         type: 'FeatureCollection',
         features: [
@@ -103,6 +138,31 @@ export default {
     },
     deep: true,
   },
+
+  computed: {
+
+    filteredParcels() {
+      
+      let conditions = []
+      
+      if (this.parcelZone) {
+        conditions.push(this.filterParcelZone);
+      }
+      
+      
+      if (conditions.length > 0) {
+        return this.parcels.filter((parcel) => {
+          return conditions.every((condition) => {
+            return condition(parcel);
+          })
+        })
+      }
+      
+      return this.parcels;
+    }
+  },
+
+
   methods: {
     //Reading data from API method.
     readDataFromAPI() {
@@ -112,19 +172,24 @@ export default {
       axios
         .get('https://dvtzufiytcwyhyjdcefr.supabase.co/rest/v1/parcel_alba?apikey=' + this.AuthStr)
         //https://api.unfolded.ai/v1/datasets/841da8d1-d830-4303-b79c-cc08c2e442af
-        //.get('https://api.instantwebtools.net/v1/passenger?size=' + itemsPerPage + '&page=' + pageNumber)
+        //.get('https://api.instantwebtools.net/v1/oarcel?size=' + itemsPerPage + '&page=' + pageNumber)
 
         .then((response) => {
           //Then injecting the result to datatable parameters.
           //console.log(response.data)
-          this.passengers = response.data
-          console.log(this.passengers[0]._geojson)
-          // this.totalPassengers = response.data.totalPassengers
-          //  this.numberOfPages = response.data.totalPages
+          this.parcels = response.data
+          console.log(this.parcel[0]._geojson)
           this.loading = false
         })
     },
+
+    filterParcelZone(item) {
+       return item.nutzungspl.toLowerCase().includes(this.parcelZone.toLowerCase());
+     },
     //this will update the prop for deck
+
+
+    
 
     updateData() {
       let featuresString = this.geoArray.join(',')
@@ -146,7 +211,6 @@ export default {
       // Json.parse('"{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[7.292724985126278,47.10542403346226],[7.293457995648748,47.105667138601575],[7.294181119718246,47.10482842651928],[7.294103949015508,47.10478412777309],[7.293627810481179,47.10437188033611],[7.292724985126278,47.10542403346226]]]},"properties":{}}"'
 
       // check why row select returns nasty strings
-      
     },
   },
   //this will trigger in the onReady State
