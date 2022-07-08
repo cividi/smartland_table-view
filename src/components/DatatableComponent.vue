@@ -2,11 +2,34 @@
   <div class="">
     <v-card>
       <v-card-title>
-        <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line hide-details></v-text-field>
-        <button @click="updateData()">Update</button>
+                <v-container fluid>
+                    <v-row>
+    
+                        <v-col cols="4">
+                            <v-row class="pa-4">
+                                <!-- Filter for dessert name-->
+                                <span class="text-h4 font-weight-light" v-text="totalParcels"></span>
+                                <span class="text-h4 font-weight-light" > Parzellen</span>
+                            </v-row>
+                        </v-col>
+
+                        <v-col cols="6">
+                            <v-row class="pa-4">
+
+                            </v-row>
+                        </v-col>
+    
+                        <v-col cols="2">
+                            <v-row class="pa-2">
+                                <button @click="updateData()">Update</button>
+                            </v-row>
+                        </v-col>
+    
+                    </v-row>
+                </v-container>
       </v-card-title>
       <v-data-table
-        @current-items="getFiltered"
+        @current-items="countParcels"
         @click:row="clickedRow"
         
         :page="page"
@@ -15,8 +38,15 @@
         :items="filteredParcels"
         :loading="loading"
         :search="search"
+        show-group-by
+        show-select
+
+
         class="elevation-1"
       >
+
+
+            
           <template v-slot:header.Flaeche="{ header }">
             {{ header.text }}
             <v-menu offset-y :close-on-content-click="false">
@@ -45,7 +75,9 @@
               </div>
             </v-menu>
           </template>
-                    <template v-slot:header.nutzungspl="{ header }">
+
+          
+          <template v-slot:header.nutzungspl="{ header }">
             {{ header.text }}
             <v-menu offset-y :close-on-content-click="false">
               <template v-slot:activator="{ on, attrs }">
@@ -73,6 +105,35 @@
               </div>
             </v-menu>
           </template>
+
+          <template v-slot:header.ptot_5="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small>
+                    mdi-filter
+                  </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                  <span class="text-h2 font-weight-light" v-text="minTot_5"></span>
+                  <v-slider
+                 v-model="minTot_5"
+                  step="500"
+                  :max="20000"
+                  :min="0"
+                  dense
+                  hint = "Personen im Einzugsgebiet von 5min per Auto"
+                  persistent-hint
+                ></v-slider>
+
+              </div>
+            </v-menu>
+          </template>
+
+
+
     </v-data-table>
       </v-data-table>
     </v-card>
@@ -86,7 +147,9 @@ export default {
   data() {
     return {
       parcelZone: '',    
-      minFlaeche: '',     
+      minFlaeche: 0,     
+      minTot_5: 0,     
+
       geoArray: [],
       search: '',
       page: 1,
@@ -98,12 +161,12 @@ export default {
       AuthStr:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dHp1Zml5dGN3eWh5amRjZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU4MjI5MzksImV4cCI6MTk3MTM5ODkzOX0.sYiIOCDj0cMSy_8WRQ9oCvPNUvc64IjsfbD3ow2Kd9A',
       headers: [
-        { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI' },
-        { text: 'Flaeche', value: 'Flaeche', filterable: true },
+        { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI' ,groupable: false,},
+        { text: 'Flaeche', value: 'Flaeche', groupable: false, },
         { text: 'nutzungsplanung', value: 'nutzungspl' },
-        { text: 'Einzugsgebiet 5min', value: 'ptot_5' },
-        { text: 'Einzugsgebiet 10min', value: 'ptot_10' },
-        { text: 'Einzugsgebiet 15min', value: 'ptot_15' },
+        { text: 'Einzugsgebiet 5min', value: 'ptot_5' ,groupable: false,},
+        { text: 'Einzugsgebiet 10min', value: 'ptot_10', groupable: false, },
+        { text: 'Einzugsgebiet 15min', value: 'ptot_15' ,groupable: false,},
       ],
       filters: {
         Flaeche: ['ddd'],
@@ -170,6 +233,13 @@ export default {
 
   computed: {
 
+
+countParcels() {
+
+          this.totalParcels = Object.keys(this.filteredParcels).length
+
+},
+
     filteredParcels() {
       
       let conditions = []
@@ -181,6 +251,10 @@ export default {
       if (this.parcelZone) {
         conditions.push(this.filterParcelZone);
       }
+
+      if (this.minTot_5) {
+        conditions.push(this.filterTot_5);
+      }
       
       if (conditions.length > 0) {
         return this.parcels.filter((parcel) => {
@@ -188,10 +262,12 @@ export default {
             return condition(parcel);
           })
         })
+
       }
-      
       return this.parcels;
     }
+
+
   },
 
 
@@ -221,6 +297,10 @@ export default {
 
     filterParcelZone(item) {
        return item.nutzungspl.toLowerCase().includes(this.parcelZone.toLowerCase());
+     },
+
+    filterTot_5(item) {
+       return item.ptot_5 > this.minTot_5;
      },
     //this will update the prop for deck
 
