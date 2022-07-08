@@ -9,7 +9,7 @@
                             <v-row class="pa-4">
                                 <!-- Filter for dessert name-->
                                 <span class="text-h4 font-weight-light" v-text="totalParcels"></span>
-                                <span class="text-h4 font-weight-light" > Parzellen</span>
+                                <span class="text-h4 font-weight-light" > &nbsp; Parzellen</span>
                             </v-row>
                         </v-col>
 
@@ -17,11 +17,12 @@
                             <v-row class="pa-4">
 
                             </v-row>
+ 
                         </v-col>
     
                         <v-col cols="2">
                             <v-row class="pa-2">
-                                <button @click="updateData()">Update</button>
+                               <v-btn elevation="2" @click="updateData()">Update Map</v-btn>
                             </v-row>
                         </v-col>
     
@@ -39,8 +40,6 @@
         :loading="loading"
         :search="search"
         show-group-by
-        show-select
-
 
         class="elevation-1"
       >
@@ -132,6 +131,12 @@
             </v-menu>
           </template>
 
+          <template v-slot:item.verified="{ item }">
+        <v-simple-checkbox
+          v-model="item.verified"
+        ></v-simple-checkbox>
+      </template>
+
 
 
     </v-data-table>
@@ -167,6 +172,8 @@ export default {
         { text: 'Einzugsgebiet 5min', value: 'ptot_5' ,groupable: false,},
         { text: 'Einzugsgebiet 10min', value: 'ptot_10', groupable: false, },
         { text: 'Einzugsgebiet 15min', value: 'ptot_15' ,groupable: false,},
+        { text: 'Verified', value: 'verified' ,groupable: false,},
+
       ],
       filters: {
         Flaeche: ['ddd'],
