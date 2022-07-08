@@ -17,7 +17,35 @@
         :search="search"
         class="elevation-1"
       >
-          <template v-slot:header.nutzungspl="{ header }">
+          <template v-slot:header.Flaeche="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small>
+                    mdi-filter
+                  </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <v-text-field
+                  v-model="minFlaeche"
+                  class="pa-4"
+                  type="text"
+                  label="Mindestflaeche"
+                  :autofocus="true"
+                ></v-text-field>
+                <v-btn
+                  @click="minFlaeche = 100000"
+                  small
+                  text
+                  color="primary"
+                  class="ml-2 mb-2"
+                >Clean</v-btn>
+              </div>
+            </v-menu>
+          </template>
+                    <template v-slot:header.nutzungspl="{ header }">
             {{ header.text }}
             <v-menu offset-y :close-on-content-click="false">
               <template v-slot:activator="{ on, attrs }">
@@ -32,7 +60,7 @@
                   v-model="parcelZone"
                   class="pa-4"
                   type="text"
-                  label="Enter the search term"
+                  label="Zone includes"
                   :autofocus="true"
                 ></v-text-field>
                 <v-btn
@@ -57,7 +85,8 @@ export default {
   name: 'DatatableComponent',
   data() {
     return {
-      parcelZone: '',      
+      parcelZone: '',    
+      minFlaeche: '',     
       geoArray: [],
       search: '',
       page: 1,
@@ -145,10 +174,13 @@ export default {
       
       let conditions = []
       
+      if (this.minFlaeche) {
+        conditions.push(this.filterFlaeche);
+      }
+      
       if (this.parcelZone) {
         conditions.push(this.filterParcelZone);
       }
-      
       
       if (conditions.length > 0) {
         return this.parcels.filter((parcel) => {
@@ -183,6 +215,10 @@ export default {
         })
     },
 
+    filterFlaeche(item) {
+       return item.Flaeche > this.minFlaeche;
+     },
+
     filterParcelZone(item) {
        return item.nutzungspl.toLowerCase().includes(this.parcelZone.toLowerCase());
      },
@@ -192,16 +228,22 @@ export default {
     
 
     updateData() {
-      let featuresString = this.geoArray.join(',')
-      let collectionString = '{ "type": "FeatureCollection","features": [' + featuresString + ']}'
+
+      this.geoArray = this.filteredParcels.map((obj) => obj._geojson)
+      console.log(this.geoArray) //print
+ 
+
+      let featuresString = this.geoArray.join(',') //joins array of features into feature string 
+      let collectionString = '{ "type": "FeatureCollection","features": [' + featuresString + ']}' //combines features into a feature collection string
       let geojsonObj = JSON.parse(collectionString)
 
       this.$emit('updateData', geojsonObj)
     },
 
     getFiltered(e) {
-      this.geoArray = e.map((obj) => obj._geojson)
-      console.log(this.geoArray) //output the filtered items
+
+      //this.geoArray = e.map((obj) => obj._geojson) //e is the response from datatable, gets _geojson collum and maps to an array
+      //console.log(this.geoArray) //output the filtered items
     },
 
     clickedRow(e) {
