@@ -21,7 +21,7 @@
                         </v-col>
     
                         <v-col cols="2">
-                            <v-row class="pa-2">
+                            <v-row class="pa-2 justify-end">
                                <v-btn elevation="2" @click="updateData()">Update Map</v-btn>
                             </v-row>
                         </v-col>
@@ -327,11 +327,6 @@ countParcels() {
       this.$emit('updateData', geojsonObj)
     },
 
-    getFiltered(e) {
-
-      //this.geoArray = e.map((obj) => obj._geojson) //e is the response from datatable, gets _geojson collum and maps to an array
-      //console.log(this.geoArray) //output the filtered items
-    },
 
     clickedRow(e) {
       console.log(e) //output the filtered items
