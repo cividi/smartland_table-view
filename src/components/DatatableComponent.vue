@@ -344,8 +344,18 @@ export default {
 
 
     clickedRow(e) {
-      console.log(e) //output the clicked row
-      const center = {latitude:46.92170893120651, longitude:7.37087148808481}
+      //console.log(e._geojson) //output the clicked row
+
+      let featuregeo = JSON.parse(e._geojson).geometry
+      //console.log(featuregeo.coordinates[0][0])
+      
+      let longitude = featuregeo.coordinates[0][0][0]
+      let latitude = featuregeo.coordinates[0][0][1]
+
+      console.log(longitude)
+
+
+      const center = {latitude:latitude, longitude:longitude}
       this.$emit('rowSelect', center)
 
       // Json.parse('"{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[7.292724985126278,47.10542403346226],[7.293457995648748,47.105667138601575],[7.294181119718246,47.10482842651928],[7.294103949015508,47.10478412777309],[7.293627810481179,47.10437188033611],[7.292724985126278,47.10542403346226]]]},"properties":{}}"'
