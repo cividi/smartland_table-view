@@ -8,7 +8,7 @@
                         <v-col cols="4">
                             <v-row class="pa-4">
                                 <!-- Filter for dessert name-->
-                                <span class="text-h4 font-weight-light" v-text="totalParcels"></span>
+                                <span class="text-h4 font-weight-light" >{{ parcelcount }}</span>
                                 <span class="text-h4 font-weight-light" > &nbsp; Parzellen</span>
                             </v-row>
                         </v-col>
@@ -30,7 +30,6 @@
                 </v-container>
       </v-card-title>
       <v-data-table
-        @current-items="countParcels"
         @click:row="clickedRow"
         
         :page="page"
@@ -137,6 +136,21 @@
         ></v-simple-checkbox>
       </template>
 
+      <template v-slot:item.rating="{ item }">
+        <v-rating
+           v-model="item.rating"
+          empty-icon="mdi-star-outline"
+          full-icon="mdi-star"
+          hover
+          length="5"
+          size="18"
+          color="grey"
+          background-color="grey"
+
+          dense
+        ></v-rating>
+      </template>
+
 
 
     </v-data-table>
@@ -158,7 +172,6 @@ export default {
       geoArray: [],
       search: '',
       page: 1,
-      totalParcels: 0,
       numberOfPages: 5,
       parcels: [],
       loading: true,
@@ -173,6 +186,8 @@ export default {
         { text: 'Einzugsgebiet 10min', value: 'ptot_10', groupable: false, },
         { text: 'Einzugsgebiet 15min', value: 'ptot_15' ,groupable: false,},
         { text: 'Verified', value: 'verified' ,groupable: false,},
+        { text: 'Rating', value: 'rating' ,groupable: false,},
+
 
       ],
       filters: {
@@ -240,10 +255,10 @@ export default {
 
   computed: {
 
+      //this updates parcelount html variable
+      parcelcount: function() {
 
-countParcels() {
-
-          this.totalParcels = Object.keys(this.filteredParcels).length
+          return Object.keys(this.filteredParcels).length
 
 },
 
@@ -293,7 +308,7 @@ countParcels() {
           //Then injecting the result to datatable parameters.
           //console.log(response.data)
           this.parcels = response.data
-          console.log(this.parcel[0]._geojson)
+          //console.log(this.parcel[0]._geojson)
           this.loading = false
         })
     },
@@ -329,8 +344,9 @@ countParcels() {
 
 
     clickedRow(e) {
-      console.log(e) //output the filtered items
-      this.$emit('rowSelect', '')
+      console.log(e) //output the clicked row
+      const center = {latitude:46.92170893120651, longitude:7.37087148808481}
+      this.$emit('rowSelect', center)
 
       // Json.parse('"{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[7.292724985126278,47.10542403346226],[7.293457995648748,47.105667138601575],[7.294181119718246,47.10482842651928],[7.294103949015508,47.10478412777309],[7.293627810481179,47.10437188033611],[7.292724985126278,47.10542403346226]]]},"properties":{}}"'
 

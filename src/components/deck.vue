@@ -1,6 +1,12 @@
 <template>
   <div class="deck-container" ref="deckContainerRef">
-    <VueDeckgl :layers="layers" :viewState="viewState" @click="handleClick" @view-state-change="updateViewState">
+    <VueDeckgl
+      :layers="layers"
+      :viewState="viewState"
+      :controller="true"
+      @click="handleClick"
+      @view-state-change="updateViewState"
+    >
       <template>
         <div id="map" ref="map"></div>
       </template>
@@ -10,6 +16,7 @@
 <script>
 import VueDeckgl from 'vue-deck.gl'
 import { GeoJsonLayer, SolidPolygonLayer } from '@deck.gl/layers'
+import { FlyToInterpolator } from '@deck.gl/core'
 import mapboxgl from 'mapbox-gl'
 
 export default {
@@ -33,7 +40,6 @@ export default {
         pitch: 0,
       },
 
-
       polygonData: {},
     }
   },
@@ -42,13 +48,11 @@ export default {
     layers() {
       const paths = new GeoJsonLayer({
         id: 'geojson-layer',
-        //data: this.pathData,
         data: this.mapData,
         pickable: true,
         stroked: false,
         filled: true,
         extruded: false,
-        pointType: 'circle',
         lineWidthScale: 20,
         lineWidthMinPixels: 5,
         getFillColor: [255, 0, 0],
@@ -63,7 +67,30 @@ export default {
     // We need to set mapbox-gl library here in order to use it in template
     this.map = null
   },
+
+  watch: {
+    SelFeature: function (newVal, oldVal) {
+      // watch it
+      console.log('Feature changed: ', newVal, ' | was: ', oldVal)
+      //console.log(Object.getOwnPropertyNames(this.viewState))
+
+      //  const { latitude, longitude, pitch, bearing, zoom } = this.viewState
+      this.viewState = {
+        latitude: newVal.latitude,
+        longitude: newVal.longitude,
+        zoom: 15,
+        bearing: 0,
+        pitch: 0,
+        transitionDuration: 500,
+      }
+
+      //this.$set(this.viewState, 'latitude', newVal.latitude) // tried with set rather dan diretly overwritng variable, no difference
+      //his.$set(this.viewState, 'transitionDuration', 3000) //as soon as transition is added assertion fails
+    },
+  },
+
   methods: {
+    //passing a "viewstate" to the function updates mapbox
     updateViewState(viewState) {
       console.log('updating view state...')
       this.viewState = {
@@ -76,6 +103,21 @@ export default {
         pitch: viewState.pitch,
       })
     },
+
+    flyTo(viewState) {
+      //not needed
+      console.log('flying to...')
+
+      console.log(Object.getOwnPropertyNames(this))
+
+      this.map.jumpTo({
+        center: [viewState.longitude, viewState.latitude],
+        zoom: viewState.zoom,
+        bearing: viewState.bearing,
+        pitch: viewState.pitch,
+      })
+    },
+
     handleClick({ event, info }) {},
   },
   mounted() {
