@@ -59,6 +59,9 @@ export default {
         getLineColor: (d) => colorToRGBArray(d.properties.color),
         getPointRadius: 100,
         getLineWidth: 1,
+        autoHighlight: true,
+        highlightedObjectIndex: 1,
+        highlightColor: [255, 255, 0],
       })
       return [paths]
     },
@@ -96,20 +99,6 @@ export default {
       this.viewState = {
         ...viewState,
       }
-      this.map.jumpTo({
-        center: [viewState.longitude, viewState.latitude],
-        zoom: viewState.zoom,
-        bearing: viewState.bearing,
-        pitch: viewState.pitch,
-      })
-    },
-
-    flyTo(viewState) {
-      //not needed
-      console.log('flying to...')
-
-      console.log(Object.getOwnPropertyNames(this))
-
       this.map.jumpTo({
         center: [viewState.longitude, viewState.latitude],
         zoom: viewState.zoom,
