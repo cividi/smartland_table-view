@@ -30,8 +30,9 @@ export default {
   },
   data() {
     return {
+      //accessToken: 'pk.eyJ1IjoiZ2VtZWluZGVzY2FuIiwiYSI6ImNrNXdqejRtMjAzaWwzbXBkbzQwejFsdDAifQ.-uuEzwv7CsbdJgDKLT6i9g',
       accessToken: 'pk.eyJ1IjoiZ2VtZWluZGVzY2FuIiwiYSI6ImNrNXdqejRtMjAzaWwzbXBkbzQwejFsdDAifQ.-uuEzwv7CsbdJgDKLT6i9g',
-      mapStyle: 'mapbox://styles/gemeindescan/cl379xy8d001614m7qrl9furx',
+      mapStyle: 'mapbox://styles/gemeindescan/ckupq2yhy0pqe17oi2khezf9a', //mapbox://styles/gemeindescan/ckupq2yhy0pqe17oi2khezf9a
       viewState: {
         latitude: 46.92271073977435,
         longitude: 7.373082645279086,
@@ -50,18 +51,18 @@ export default {
         id: 'geojson-layer',
         data: this.mapData,
         pickable: true,
-        stroked: false,
-        filled: true,
+        stroked: true,
+        filled: false,
         extruded: false,
-        lineWidthScale: 20,
-        lineWidthMinPixels: 5,
+        //lineWidthScale: 20,
+        lineWidthMinPixels: 1,
         getFillColor: [255, 0, 0],
-        getLineColor: (d) => colorToRGBArray(d.properties.color),
         getPointRadius: 100,
-        getLineWidth: 1,
+        getLineWidth: 5,
         autoHighlight: true,
-        highlightedObjectIndex: 1,
+        //highlightedObjectIndex: 1,
         highlightColor: [255, 255, 0],
+        getLineColor: [255, 0, 0, 255],
       })
       return [paths]
     },
@@ -115,7 +116,7 @@ export default {
       accessToken: this.accessToken,
       container: this.$refs.map,
       interactive: false,
-      style: this.mapStyle || 'mapbox://styles/haxzie/ck7h838qb0bik1iofe0k2i3f2',
+      style: this.mapStyle || 'mapbox://styles/gemeindescan/ckupq2yhy0pqe17oi2khezf9a', //mapbox://styles/haxzie/ck7h838qb0bik1iofe0k2i3f2
       center: [this.viewState.longitude, this.viewState.latitude],
       zoom: this.viewState.zoom,
       pitch: this.viewState.pitch,
