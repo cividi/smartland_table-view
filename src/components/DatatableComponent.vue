@@ -184,6 +184,7 @@
 
           <template v-slot:item.verified="{ item }">
         <v-simple-checkbox
+          :ripple="false"
           v-model="item.verified"
         ></v-simple-checkbox>
       </template>
@@ -213,9 +214,13 @@
 
 <script>
 import supabase from '../utils/supabase'
+import { VContainer, VCol, VRow, VCard, VCardTitle, VBtn, VDataTable, VRating, VSimpleCheckbox, VSlider, VMenu, VIcon } from 'vuetify/lib/components'
 
 export default {
   name: 'DatatableComponent',
+  components: {
+    VContainer, VCol, VRow, VCard, VCardTitle, VBtn, VDataTable, VRating, VSimpleCheckbox, VSlider, VMenu, VIcon
+  },
   data() {
     return {
       parcelZone: '',    

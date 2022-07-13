@@ -17,12 +17,14 @@
 import { defineComponent } from '@vue/composition-api'
 import DatatableComponent from './components/DatatableComponent.vue'
 import VueDeck from './components/deck.vue'
+import { VApp, VContainer, VCol, VRow } from 'vuetify/lib/components'
 
 export default defineComponent({
   name: 'App',
   components: {
     DatatableComponent,
     VueDeck,
+    VApp, VRow, VCol, VContainer
   },
   data() {
     return {
