@@ -177,8 +177,6 @@ export default {
       parcels: [],
       loading: true,
       options: {},
-      supabaseAuth: import.meta.env.VITE_SUPABASE_AUTH || '',
-      supabaseInstance: import.meta.env.VITE_SUPABASE_INSTANCE || '',
       supabaseDB: import.meta.env.VITE_SUPABASE_DB || '',
       headers: [
         { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI' ,groupable: false,},
