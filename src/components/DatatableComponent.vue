@@ -33,7 +33,7 @@
         @click:row="clickedRow"
         
         :page="page"
-        :pageCount="numberOfPages"
+         :pageCount="numberOfPages" 
         :headers="headers"
         :items="filteredParcels"
         :loading="loading"
@@ -64,7 +64,7 @@
                   :autofocus="true"
                 ></v-text-field>
                 <v-btn
-                  @click="minFlaeche = 100000"
+                  @click="minFlaeche = 0"
                   small
                   text
                   color="primary"
@@ -130,6 +130,58 @@
             </v-menu>
           </template>
 
+                    <template v-slot:header.ptot_10="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small>
+                    mdi-filter
+                  </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                  <span class="text-h2 font-weight-light" v-text="minTot_10"></span>
+                  <v-slider
+                 v-model="minTot_10"
+                  step="500"
+                  :max="50000"
+                  :min="0"
+                  dense
+                  hint = "Personen im Einzugsgebiet von 10min per Auto"
+                  persistent-hint
+                ></v-slider>
+
+              </div>
+            </v-menu>
+          </template>
+
+                    <template v-slot:header.ptot_15="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small>
+                    mdi-filter
+                  </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                  <span class="text-h2 font-weight-light" v-text="minTot_15"></span>
+                  <v-slider
+                 v-model="minTot_15"
+                  step="500"
+                  :max="50000"
+                  :min="0"
+                  dense
+                  hint = "Personen im Einzugsgebiet von 15min per Auto"
+                  persistent-hint
+                ></v-slider>
+
+              </div>
+            </v-menu>
+          </template>
+
           <template v-slot:item.verified="{ item }">
         <v-simple-checkbox
           v-model="item.verified"
@@ -169,6 +221,9 @@ export default {
       parcelZone: '',    
       minFlaeche: 0,     
       minTot_5: 0,     
+      minTot_10: 0,     
+      minTot_15: 0,     
+
 
       geoArray: [],
       search: '',
@@ -190,57 +245,6 @@ export default {
 
 
       ],
-      filters: {
-        Flaeche: ['ddd'],
-        ptot_5: [],
-        ptot_10: [],
-      },
-      testdata: {
-        type: 'FeatureCollection',
-        features: [
-          {
-            type: 'Feature',
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [7.373082645279086, 46.92271073977435],
-                  [7.373904713225365, 46.92308897771411],
-                  [7.37483054879466, 46.922567674750034],
-                  [7.374306792418967, 46.922228743183894],
-                  [7.373929660979968, 46.92203451855106],
-                  [7.373840373534961, 46.922021316279185],
-                  [7.373753152777899, 46.92205728299517],
-                  [7.373732933003192, 46.922047448582205],
-                  [7.373082645279086, 46.92271073977435],
-                ],
-              ],
-            },
-            properties: {},
-          },
-          {
-            type: 'Feature',
-            geometry: {
-              type: 'Polygon',
-              coordinates: [
-                [
-                  [7.50432518393944, 46.984466587515236],
-                  [7.505396227647753, 46.98457932478502],
-                  [7.505805566577375, 46.98465251608187],
-                  [7.505888425211487, 46.98463920035581],
-                  [7.505898376369397, 46.98460801750864],
-                  [7.505727058388661, 46.98408982666899],
-                  [7.505585737397647, 46.983453197462346],
-                  [7.505599664893464, 46.98342760730947],
-                  [7.504364451832481, 46.98403598686721],
-                  [7.50432518393944, 46.984466587515236],
-                ],
-              ],
-            },
-            properties: {},
-          },
-        ],
-      },
     }
   },
   //this one will populate new data set when user changes current page.
@@ -275,6 +279,14 @@ export default {
       if (this.minTot_5) {
         conditions.push(this.filterTot_5);
       }
+
+      if (this.minTot_10) {
+        conditions.push(this.filterTot_10);
+      }
+
+      if (this.minTot_15) {
+        conditions.push(this.filterTot_15);
+      }
       
       if (conditions.length > 0) {
         return this.parcels.filter((parcel) => {
@@ -301,6 +313,43 @@ export default {
       this.loading = false
     },
 
+    updateDataviaAPI() {
+      this.loading = true
+
+      let data = {
+       query: `
+      query PostsForAuthor {
+        author(id: 1) {
+          firstName
+            posts {
+              title
+              votes
+            }
+          }
+        }
+      `
+        }
+      
+      this.parcels //for now the current 
+
+      axios
+        .patch('https://dvtzufiytcwyhyjdcefr.supabase.co/rest/v1/parcel_alba/update/CH708535854652/?apikey=' + this.AuthStr,data)
+        //.get('https://api.instantwebtools.net/v1/oarcel?size=' + itemsPerPage + '&page=' + pageNumber)
+
+        .then((response) => {
+          //Then injecting the result to datatable parameters.
+          console.log(response.data)
+          //this.parcels = response.data
+          //console.log(this.parcel[0]._geojson)
+          this.loading = false
+        })
+    },
+
+    
+
+
+
+
     filterFlaeche(item) {
        return item.Flaeche > this.minFlaeche;
      },
@@ -311,6 +360,14 @@ export default {
 
     filterTot_5(item) {
        return item.ptot_5 > this.minTot_5;
+     },
+
+    filterTot_10(item) {
+       return item.ptot_10 > this.minTot_10;
+     },
+
+    filterTot_15(item) {
+       return item.ptot_15 > this.minTot_15;
      },
     //this will update the prop for deck
 
@@ -334,6 +391,7 @@ export default {
     clickedRow(e) {
       console.log(e) //output the clicked row
 
+
       let featuregeo = JSON.parse(e._geojson).geometry
       //console.log(featuregeo.coordinates[0][0])
       
@@ -356,7 +414,7 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 a {
   color: #42b983;
 }
