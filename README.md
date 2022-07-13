@@ -1,3 +1,16 @@
-# vue2-vuetify-vite-starter-pcbq7n
+# experimental deckgl map + vuetify data-table
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/vue2-vuetify-vite-starter-pcbq7n)
+## dev setup
+
+```bash
+# setup environment variables
+cp .env.sample .env.local
+
+# IMPORTANT: edit .env.local to contain actual values
+
+# install depedencies
+yarn
+
+# run local instance
+yarn dev
+```
