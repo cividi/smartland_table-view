@@ -4,7 +4,7 @@ import VueCompositionApi from '@vue/composition-api'
 import vuetify from './vuetify'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
-Vue.use(VueCompositionApi, VueAxios, axios)
+Vue.use(VueCompositionApi)
 
 new Vue({
   vuetify,
