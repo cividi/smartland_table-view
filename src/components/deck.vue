@@ -1,12 +1,7 @@
 <template>
   <div class="deck-container" ref="deckContainerRef">
-    <VueDeckgl
-      :layers="layers"
-      :viewState="viewState"
-      :controller="true"
-      @click="handleClick"
-      @view-state-change="updateViewState"
-    >
+    <VueDeckgl :layers="layers" :viewState="viewState" :controller="true" @click="handleClick"
+      @view-state-change="updateViewState">
       <template>
         <div id="map" ref="map"></div>
       </template>
@@ -106,7 +101,7 @@ export default {
       })
     },
 
-    handleClick({ event, info }) {},
+    handleClick({ event, info }) { },
   },
   mounted() {
     // creating the map
