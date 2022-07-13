@@ -47,7 +47,7 @@
             <div style="background-color: white; width: 280px">
               <v-text-field v-model="minFlaeche" class="pa-4" type="text" label="Mindestflaeche" :autofocus="true">
               </v-text-field>
-              <v-btn @click="minFlaeche = 0" small text color="primary" class="ml-2 mb-2">Clean</v-btn>
+              <v-btn @click="minFlaeche = 0" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
             </div>
           </v-menu>
         </template>
@@ -66,7 +66,7 @@
             <div style="background-color: white; width: 280px">
               <v-text-field v-model="parcelZone" class="pa-4" type="text" label="Zone includes" :autofocus="true">
               </v-text-field>
-              <v-btn @click="parcelZone = ''" small text color="primary" class="ml-2 mb-2">Clean</v-btn>
+              <v-btn @click="parcelZone = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
             </div>
           </v-menu>
         </template>
@@ -85,7 +85,6 @@
               <span class="text-h2 font-weight-light" v-text="minTot_5"></span>
               <v-slider v-model="minTot_5" step="500" :max="20000" :min="0" dense
                 hint="Personen im Einzugsgebiet von 5min per Auto" persistent-hint></v-slider>
-
             </div>
           </v-menu>
         </template>
@@ -128,18 +127,17 @@
           </v-menu>
         </template>
 
-        <template v-slot:item.verified="{ item }">
-          <v-simple-checkbox :ripple="false" v-model="item.verified"></v-simple-checkbox>
+        <template v-slot:item.validated="{ item }">
+          <v-simple-checkbox :ripple="false" v-model="item.validated" @click="validateItem(item)"></v-simple-checkbox>
         </template>
 
         <template v-slot:item.rating="{ item }">
           <v-rating v-model="item.rating" empty-icon="mdi-star-outline" full-icon="mdi-star" hover length="5" size="18"
-            color="grey" background-color="grey" @click="submitRating" dense></v-rating>
+            color="grey" background-color="grey" dense v-on:input="rateItem(item)"></v-rating>
         </template>
 
 
 
-      </v-data-table>
       </v-data-table>
     </v-card>
   </div>
@@ -160,6 +158,7 @@ import {
   VSlider,
   VMenu,
   VIcon,
+  VTextField,
 } from 'vuetify/lib/components'
 
 export default {
@@ -172,6 +171,7 @@ export default {
     VCardTitle,
     VBtn,
     VDataTable,
+    VTextField,
     VRating,
     VSimpleCheckbox,
     VSlider,
@@ -201,7 +201,7 @@ export default {
         { text: 'Einzugsgebiet 5min', value: 'ptot_5', groupable: false },
         { text: 'Einzugsgebiet 10min', value: 'ptot_10', groupable: false },
         { text: 'Einzugsgebiet 15min', value: 'ptot_15', groupable: false },
-        { text: 'Verified', value: 'verified', groupable: false },
+        { text: 'Validated', value: 'validated', groupable: false },
         { text: 'Rating', value: 'rating', groupable: false },
       ],
     }
@@ -260,48 +260,10 @@ export default {
     //Reading data from API method.
     async readDataFromAPI() {
       this.loading = true
-      const { data } = await supabase.from(import.meta.env.VITE_SUPABASE_DB).select('*')
+      const { data } = await supabase.from(this.supabaseDB).select('*')
       this.parcels = data
       this.loading = false
-    },
-
-    submitRating(e) {
-      console.log(`New rating for ${e.EGRIS_EGRI}: ${e.rating}`)
-    },
-
-    updateDataviaAPI() {
-      this.loading = true
-
-      let data = {
-        query: `
-      query PostsForAuthor {
-        author(id: 1) {
-          firstName
-            posts {
-              title
-              votes
-            }
-          }
-        }
-      `,
-      }
-
-      this.parcels //for now the current
-
-      axios
-        .patch(
-          'https://dvtzufiytcwyhyjdcefr.supabase.co/rest/v1/parcel_alba/update/CH708535854652/?apikey=' + this.AuthStr,
-          data
-        )
-        //.get('https://api.instantwebtools.net/v1/oarcel?size=' + itemsPerPage + '&page=' + pageNumber)
-
-        .then((response) => {
-          //Then injecting the result to datatable parameters.
-          console.log(response.data)
-          //this.parcels = response.data
-          //console.log(this.parcel[0]._geojson)
-          this.loading = false
-        })
+      this.updateData()
     },
 
     filterFlaeche(item) {
@@ -327,7 +289,7 @@ export default {
 
     updateData() {
       this.geoArray = this.filteredParcels.map((obj) => obj._geojson)
-      console.log(this.geoArray) //print
+      // console.log(this.geoArray) //print
 
       let featuresString = this.geoArray.join(',') //joins array of features into feature string
       let collectionString = '{ "type": "FeatureCollection","features": [' + featuresString + ']}' //combines features into a feature collection string
@@ -336,9 +298,27 @@ export default {
       this.$emit('updateData', geojsonObj)
     },
 
-    clickedRow(e) {
-      console.log(e) //output the clicked row
+    async validateItem(e) {  
+        console.log(`${e.EGRIS_EGRI} is set to ${e.validated}`);
+        const { data, error } = await supabase
+          .from(this.supabaseDB)
+          .update({ validated: e.validated })
+          .match({ EGRIS_EGRI: e.EGRIS_EGRI })
+        console.log(data, error)
+    },
 
+    async rateItem(e) {
+      if(e.rating) {
+        console.log(`${e.EGRIS_EGRI} is now rated at ${e.rating}`);
+        const { data, error } = await supabase
+          .from(this.supabaseDB)
+          .update({ rating: e.rating })
+          .match({ EGRIS_EGRI: e.EGRIS_EGRI })
+        console.log(data, error)
+      }
+    },
+
+    clickedRow(e) {
       let featuregeo = JSON.parse(e._geojson).geometry
       //console.log(featuregeo.coordinates[0][0])
 
@@ -347,6 +327,8 @@ export default {
 
       const feature = { latitude: latitude, longitude: longitude }
       this.$emit('rowSelect', feature)
+
+      console.log(e);
 
       // Json.parse('"{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[7.292724985126278,47.10542403346226],[7.293457995648748,47.105667138601575],[7.294181119718246,47.10482842651928],[7.294103949015508,47.10478412777309],[7.293627810481179,47.10437188033611],[7.292724985126278,47.10542403346226]]]},"properties":{}}"'
 
