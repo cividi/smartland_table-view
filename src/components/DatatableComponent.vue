@@ -160,7 +160,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import supabase from '../utils/supabase'
+
 export default {
   name: 'DatatableComponent',
   data() {
@@ -176,8 +177,9 @@ export default {
       parcels: [],
       loading: true,
       options: {},
-      AuthStr:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dHp1Zml5dGN3eWh5amRjZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU4MjI5MzksImV4cCI6MTk3MTM5ODkzOX0.sYiIOCDj0cMSy_8WRQ9oCvPNUvc64IjsfbD3ow2Kd9A',
+      supabaseAuth: import.meta.env.VITE_SUPABASE_AUTH || '',
+      supabaseInstance: import.meta.env.VITE_SUPABASE_INSTANCE || '',
+      supabaseDB: import.meta.env.VITE_SUPABASE_DB || '',
       headers: [
         { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI' ,groupable: false,},
         { text: 'Flaeche', value: 'Flaeche', groupable: false, },
@@ -293,22 +295,12 @@ export default {
 
   methods: {
     //Reading data from API method.
-    readDataFromAPI() {
-      this.loading = true
-      //const { page, itemsPerPage } = this.options
-      // let pageNumber = page - 1
-      axios
-        .get('https://dvtzufiytcwyhyjdcefr.supabase.co/rest/v1/parcel_alba?apikey=' + this.AuthStr)
-        //https://api.unfolded.ai/v1/datasets/841da8d1-d830-4303-b79c-cc08c2e442af
-        //.get('https://api.instantwebtools.net/v1/oarcel?size=' + itemsPerPage + '&page=' + pageNumber)
+    async readDataFromAPI() {
 
-        .then((response) => {
-          //Then injecting the result to datatable parameters.
-          //console.log(response.data)
-          this.parcels = response.data
-          //console.log(this.parcel[0]._geojson)
-          this.loading = false
-        })
+      this.loading = true
+      const { data } = await supabase.from(import.meta.env.VITE_SUPABASE_DB).select('*')
+      this.parcels = data
+      this.loading = false
     },
 
     filterFlaeche(item) {
@@ -366,7 +358,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 a {
   color: #42b983;
 }
