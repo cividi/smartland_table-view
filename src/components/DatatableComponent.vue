@@ -2,227 +2,189 @@
   <div class="">
     <v-card>
       <v-card-title>
-                <v-container fluid>
-                    <v-row>
-    
-                        <v-col cols="4">
-                            <v-row class="pa-4">
-                                <!-- Filter for dessert name-->
-                                <span class="text-h4 font-weight-light" >{{ parcelcount }}</span>
-                                <span class="text-h4 font-weight-light" > &nbsp; Parzellen</span>
-                            </v-row>
-                        </v-col>
+        <v-container fluid>
+          <v-row>
 
-                        <v-col cols="6">
-                            <v-row class="pa-4">
+            <v-col cols="4">
+              <v-row class="pa-4">
+                <!-- Filter for dessert name-->
+                <span class="text-h4 font-weight-light">{{ parcelcount }}</span>
+                <span class="text-h4 font-weight-light"> &nbsp; Parzellen</span>
+              </v-row>
+            </v-col>
 
-                            </v-row>
- 
-                        </v-col>
-    
-                        <v-col cols="2">
-                            <v-row class="pa-2 justify-end">
-                               <v-btn elevation="2" @click="updateData()">Update Map</v-btn>
-                            </v-row>
-                        </v-col>
-    
-                    </v-row>
-                </v-container>
+            <v-col cols="6">
+              <v-row class="pa-4">
+
+              </v-row>
+
+            </v-col>
+
+            <v-col cols="2">
+              <v-row class="pa-2 justify-end">
+                <v-btn elevation="2" @click="updateData()">Update Map</v-btn>
+              </v-row>
+            </v-col>
+
+          </v-row>
+        </v-container>
       </v-card-title>
-      <v-data-table
-        @click:row="clickedRow"
-        
-        :page="page"
-         :pageCount="numberOfPages" 
-        :headers="headers"
-        :items="filteredParcels"
-        :loading="loading"
-        :search="search"
-        show-group-by
-
-        class="elevation-1"
-      >
-
-
-            
-          <template v-slot:header.Flaeche="{ header }">
-            {{ header.text }}
-            <v-menu offset-y :close-on-content-click="false">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon small>
-                    mdi-filter
-                  </v-icon>
-                </v-btn>
-              </template>
-              <div style="background-color: white; width: 280px">
-                <v-text-field
-                  v-model="minFlaeche"
-                  class="pa-4"
-                  type="text"
-                  label="Mindestflaeche"
-                  :autofocus="true"
-                ></v-text-field>
-                <v-btn
-                  @click="minFlaeche = 0"
-                  small
-                  text
-                  color="primary"
-                  class="ml-2 mb-2"
-                >Clean</v-btn>
-              </div>
-            </v-menu>
-          </template>
-
-          
-          <template v-slot:header.nutzungspl="{ header }">
-            {{ header.text }}
-            <v-menu offset-y :close-on-content-click="false">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon small>
-                    mdi-filter
-                  </v-icon>
-                </v-btn>
-              </template>
-              <div style="background-color: white; width: 280px">
-                <v-text-field
-                  v-model="parcelZone"
-                  class="pa-4"
-                  type="text"
-                  label="Zone includes"
-                  :autofocus="true"
-                ></v-text-field>
-                <v-btn
-                  @click="parcelZone = ''"
-                  small
-                  text
-                  color="primary"
-                  class="ml-2 mb-2"
-                >Clean</v-btn>
-              </div>
-            </v-menu>
-          </template>
-
-          <template v-slot:header.ptot_5="{ header }">
-            {{ header.text }}
-            <v-menu offset-y :close-on-content-click="false">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon small>
-                    mdi-filter
-                  </v-icon>
-                </v-btn>
-              </template>
-              <div style="background-color: white; width: 280px">
-                  <span class="text-h2 font-weight-light" v-text="minTot_5"></span>
-                  <v-slider
-                 v-model="minTot_5"
-                  step="500"
-                  :max="20000"
-                  :min="0"
-                  dense
-                  hint = "Personen im Einzugsgebiet von 5min per Auto"
-                  persistent-hint
-                ></v-slider>
-
-              </div>
-            </v-menu>
-          </template>
-
-                    <template v-slot:header.ptot_10="{ header }">
-            {{ header.text }}
-            <v-menu offset-y :close-on-content-click="false">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon small>
-                    mdi-filter
-                  </v-icon>
-                </v-btn>
-              </template>
-              <div style="background-color: white; width: 280px">
-                  <span class="text-h2 font-weight-light" v-text="minTot_10"></span>
-                  <v-slider
-                 v-model="minTot_10"
-                  step="500"
-                  :max="50000"
-                  :min="0"
-                  dense
-                  hint = "Personen im Einzugsgebiet von 10min per Auto"
-                  persistent-hint
-                ></v-slider>
-
-              </div>
-            </v-menu>
-          </template>
-
-                    <template v-slot:header.ptot_15="{ header }">
-            {{ header.text }}
-            <v-menu offset-y :close-on-content-click="false">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on">
-                  <v-icon small>
-                    mdi-filter
-                  </v-icon>
-                </v-btn>
-              </template>
-              <div style="background-color: white; width: 280px">
-                  <span class="text-h2 font-weight-light" v-text="minTot_15"></span>
-                  <v-slider
-                 v-model="minTot_15"
-                  step="500"
-                  :max="50000"
-                  :min="0"
-                  dense
-                  hint = "Personen im Einzugsgebiet von 15min per Auto"
-                  persistent-hint
-                ></v-slider>
-
-              </div>
-            </v-menu>
-          </template>
-
-          <template v-slot:item.verified="{ item }">
-        <v-simple-checkbox
-          v-model="item.verified"
-        ></v-simple-checkbox>
-      </template>
-
-      <template v-slot:item.rating="{ item }">
-        <v-rating
-           v-model="item.rating"
-          empty-icon="mdi-star-outline"
-          full-icon="mdi-star"
-          hover
-          length="5"
-          size="18"
-          color="grey"
-          background-color="grey"
-
-          dense
-        ></v-rating>
-      </template>
+      <v-data-table @click:row="clickedRow" :page="page" :pageCount="numberOfPages" :headers="headers"
+        :items="filteredParcels" :loading="loading" :search="search" show-group-by class="elevation-1">
 
 
 
-    </v-data-table>
+        <template v-slot:header.Flaeche="{ header }">
+          {{ header.text }}
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small>
+                  mdi-filter
+                </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <v-text-field v-model="minFlaeche" class="pa-4" type="text" label="Mindestflaeche" :autofocus="true">
+              </v-text-field>
+              <v-btn @click="minFlaeche = 0" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
+            </div>
+          </v-menu>
+        </template>
+
+
+        <template v-slot:header.nutzungspl="{ header }">
+          {{ header.text }}
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small>
+                  mdi-filter
+                </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <v-text-field v-model="parcelZone" class="pa-4" type="text" label="Zone includes" :autofocus="true">
+              </v-text-field>
+              <v-btn @click="parcelZone = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
+            </div>
+          </v-menu>
+        </template>
+
+        <template v-slot:header.ptot_5="{ header }">
+          {{ header.text }}
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small>
+                  mdi-filter
+                </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <span class="text-h2 font-weight-light" v-text="minTot_5"></span>
+              <v-slider v-model="minTot_5" step="500" :max="20000" :min="0" dense
+                hint="Personen im Einzugsgebiet von 5min per Auto" persistent-hint></v-slider>
+            </div>
+          </v-menu>
+        </template>
+
+        <template v-slot:header.ptot_10="{ header }">
+          {{ header.text }}
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small>
+                  mdi-filter
+                </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <span class="text-h2 font-weight-light" v-text="minTot_10"></span>
+              <v-slider v-model="minTot_10" step="500" :max="50000" :min="0" dense
+                hint="Personen im Einzugsgebiet von 10min per Auto" persistent-hint></v-slider>
+
+            </div>
+          </v-menu>
+        </template>
+
+        <template v-slot:header.ptot_15="{ header }">
+          {{ header.text }}
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small>
+                  mdi-filter
+                </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <span class="text-h2 font-weight-light" v-text="minTot_15"></span>
+              <v-slider v-model="minTot_15" step="500" :max="50000" :min="0" dense
+                hint="Personen im Einzugsgebiet von 15min per Auto" persistent-hint></v-slider>
+
+            </div>
+          </v-menu>
+        </template>
+
+        <template v-slot:item.validated="{ item }">
+          <v-simple-checkbox :ripple="false" v-model="item.validated" @click="validateItem(item)"></v-simple-checkbox>
+        </template>
+
+        <template v-slot:item.rating="{ item }">
+          <v-rating v-model="item.rating" empty-icon="mdi-star-outline" full-icon="mdi-star" hover length="5" size="18"
+            color="grey" background-color="grey" dense v-on:input="rateItem(item)"></v-rating>
+        </template>
+
+
+
       </v-data-table>
     </v-card>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import supabase from '../utils/supabase'
+import {
+  VContainer,
+  VCol,
+  VRow,
+  VCard,
+  VCardTitle,
+  VBtn,
+  VDataTable,
+  VRating,
+  VSimpleCheckbox,
+  VSlider,
+  VMenu,
+  VIcon,
+  VTextField,
+} from 'vuetify/lib/components'
+
 export default {
   name: 'DatatableComponent',
+  components: {
+    VContainer,
+    VCol,
+    VRow,
+    VCard,
+    VCardTitle,
+    VBtn,
+    VDataTable,
+    VTextField,
+    VRating,
+    VSimpleCheckbox,
+    VSlider,
+    VMenu,
+    VIcon,
+  },
   data() {
     return {
-      parcelZone: '',    
-      minFlaeche: 0,     
-      minTot_5: 0,     
-      minTot_10: 0,     
-      minTot_15: 0,     
-
+      parcelZone: '',
+      minFlaeche: 0,
+      minTot_5: 0,
+      minTot_10: 0,
+      minTot_15: 0,
 
       geoArray: [],
       search: '',
@@ -231,19 +193,16 @@ export default {
       parcels: [],
       loading: true,
       options: {},
-      AuthStr:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2dHp1Zml5dGN3eWh5amRjZWZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTU4MjI5MzksImV4cCI6MTk3MTM5ODkzOX0.sYiIOCDj0cMSy_8WRQ9oCvPNUvc64IjsfbD3ow2Kd9A',
+      supabaseDB: import.meta.env.VITE_SUPABASE_DB || '',
       headers: [
-        { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI' ,groupable: false,},
-        { text: 'Flaeche', value: 'Flaeche', groupable: false, },
+        { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI', groupable: false },
+        { text: 'Flaeche', value: 'Flaeche', groupable: false },
         { text: 'nutzungsplanung', value: 'nutzungspl' },
-        { text: 'Einzugsgebiet 5min', value: 'ptot_5' ,groupable: false,},
-        { text: 'Einzugsgebiet 10min', value: 'ptot_10', groupable: false, },
-        { text: 'Einzugsgebiet 15min', value: 'ptot_15' ,groupable: false,},
-        { text: 'Verified', value: 'verified' ,groupable: false,},
-        { text: 'Rating', value: 'rating' ,groupable: false,},
-
-
+        { text: 'Einzugsgebiet 5min', value: 'ptot_5', groupable: false },
+        { text: 'Einzugsgebiet 10min', value: 'ptot_10', groupable: false },
+        { text: 'Einzugsgebiet 15min', value: 'ptot_15', groupable: false },
+        { text: 'Validated', value: 'validated', groupable: false },
+        { text: 'Rating', value: 'rating', groupable: false },
       ],
     }
   },
@@ -258,158 +217,118 @@ export default {
   },
 
   computed: {
-
-      //this updates parcelount html variable
-      parcelcount: function() {
-          return Object.keys(this.filteredParcels).length
-},
+    //this updates parcelount html variable
+    parcelcount: function () {
+      return Object.keys(this.filteredParcels).length
+    },
 
     filteredParcels() {
-      
       let conditions = []
-      
+
       if (this.minFlaeche) {
-        conditions.push(this.filterFlaeche);
+        conditions.push(this.filterFlaeche)
       }
-      
+
       if (this.parcelZone) {
-        conditions.push(this.filterParcelZone);
+        conditions.push(this.filterParcelZone)
       }
 
       if (this.minTot_5) {
-        conditions.push(this.filterTot_5);
+        conditions.push(this.filterTot_5)
       }
 
       if (this.minTot_10) {
-        conditions.push(this.filterTot_10);
+        conditions.push(this.filterTot_10)
       }
 
       if (this.minTot_15) {
-        conditions.push(this.filterTot_15);
+        conditions.push(this.filterTot_15)
       }
-      
+
       if (conditions.length > 0) {
         return this.parcels.filter((parcel) => {
           return conditions.every((condition) => {
-            return condition(parcel);
+            return condition(parcel)
           })
         })
-
       }
-      return this.parcels;
-    }
-
-
+      return this.parcels
+    },
   },
-
 
   methods: {
     //Reading data from API method.
-    readDataFromAPI() {
+    async readDataFromAPI() {
       this.loading = true
-      //const { page, itemsPerPage } = this.options
-      axios
-        .get('https://dvtzufiytcwyhyjdcefr.supabase.co/rest/v1/parcel_alba?apikey=' + this.AuthStr)
-        //https://api.unfolded.ai/v1/datasets/841da8d1-d830-4303-b79c-cc08c2e442af
-        //.get('https://api.instantwebtools.net/v1/oarcel?size=' + itemsPerPage + '&page=' + pageNumber)
-
-        .then((response) => {
-          //Then injecting the result to datatable parameters.
-          //console.log(response.data)
-          this.parcels = response.data
-          //console.log(this.parcel[0]._geojson)
-          this.loading = false
-        })
+      const { data } = await supabase.from(this.supabaseDB).select('*')
+      this.parcels = data
+      this.loading = false
+      this.updateData()
     },
-
-    updateDataviaAPI() {
-      this.loading = true
-
-      let data = {
-       query: `
-      query PostsForAuthor {
-        author(id: 1) {
-          firstName
-            posts {
-              title
-              votes
-            }
-          }
-        }
-      `
-        }
-      
-      this.parcels //for now the current 
-
-      axios
-        .patch('https://dvtzufiytcwyhyjdcefr.supabase.co/rest/v1/parcel_alba/update/CH708535854652/?apikey=' + this.AuthStr,data)
-        //.get('https://api.instantwebtools.net/v1/oarcel?size=' + itemsPerPage + '&page=' + pageNumber)
-
-        .then((response) => {
-          //Then injecting the result to datatable parameters.
-          console.log(response.data)
-          //this.parcels = response.data
-          //console.log(this.parcel[0]._geojson)
-          this.loading = false
-        })
-    },
-
-    
-
-
-
 
     filterFlaeche(item) {
-       return item.Flaeche > this.minFlaeche;
-     },
+      return item.Flaeche > this.minFlaeche
+    },
 
     filterParcelZone(item) {
-       return item.nutzungspl.toLowerCase().includes(this.parcelZone.toLowerCase());
-     },
+      return item.nutzungspl.toLowerCase().includes(this.parcelZone.toLowerCase())
+    },
 
     filterTot_5(item) {
-       return item.ptot_5 > this.minTot_5;
-     },
+      return item.ptot_5 > this.minTot_5
+    },
 
     filterTot_10(item) {
-       return item.ptot_10 > this.minTot_10;
-     },
+      return item.ptot_10 > this.minTot_10
+    },
 
     filterTot_15(item) {
-       return item.ptot_15 > this.minTot_15;
-     },
+      return item.ptot_15 > this.minTot_15
+    },
     //this will update the prop for deck
 
-
-    
-
     updateData() {
-
       this.geoArray = this.filteredParcels.map((obj) => obj._geojson)
-      console.log(this.geoArray) //print
- 
+      // console.log(this.geoArray) //print
 
-      let featuresString = this.geoArray.join(',') //joins array of features into feature string 
+      let featuresString = this.geoArray.join(',') //joins array of features into feature string
       let collectionString = '{ "type": "FeatureCollection","features": [' + featuresString + ']}' //combines features into a feature collection string
       let geojsonObj = JSON.parse(collectionString)
 
       this.$emit('updateData', geojsonObj)
     },
 
+    async validateItem(e) {  
+        console.log(`${e.EGRIS_EGRI} is set to ${e.validated}`);
+        const { data, error } = await supabase
+          .from(this.supabaseDB)
+          .update({ validated: e.validated })
+          .match({ EGRIS_EGRI: e.EGRIS_EGRI })
+        console.log(data, error)
+    },
+
+    async rateItem(e) {
+      if(e.rating) {
+        console.log(`${e.EGRIS_EGRI} is now rated at ${e.rating}`);
+        const { data, error } = await supabase
+          .from(this.supabaseDB)
+          .update({ rating: e.rating })
+          .match({ EGRIS_EGRI: e.EGRIS_EGRI })
+        console.log(data, error)
+      }
+    },
 
     clickedRow(e) {
-      console.log(e) //output the clicked row
-
-
       let featuregeo = JSON.parse(e._geojson).geometry
       //console.log(featuregeo.coordinates[0][0])
-      
+
       let longitude = featuregeo.coordinates[0][0][0]
       let latitude = featuregeo.coordinates[0][0][1]
 
-
-      const feature = {latitude:latitude, longitude:longitude}
+      const feature = { latitude: latitude, longitude: longitude }
       this.$emit('rowSelect', feature)
+
+      console.log(e);
 
       // Json.parse('"{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[7.292724985126278,47.10542403346226],[7.293457995648748,47.105667138601575],[7.294181119718246,47.10482842651928],[7.294103949015508,47.10478412777309],[7.293627810481179,47.10437188033611],[7.292724985126278,47.10542403346226]]]},"properties":{}}"'
 

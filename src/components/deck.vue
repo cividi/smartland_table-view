@@ -1,12 +1,7 @@
 <template>
   <div class="deck-container" ref="deckContainerRef">
-    <VueDeckgl
-      :layers="layers"
-      :viewState="viewState"
-      :controller="true"
-      @click="handleClick"
-      @view-state-change="updateViewState"
-    >
+    <VueDeckgl :layers="layers" :viewState="viewState" :controller="true" @click="handleClick"
+      @view-state-change="updateViewState">
       <template>
         <div id="map" ref="map"></div>
       </template>
@@ -30,9 +25,8 @@ export default {
   },
   data() {
     return {
-      //accessToken: 'pk.eyJ1IjoiZ2VtZWluZGVzY2FuIiwiYSI6ImNrNXdqejRtMjAzaWwzbXBkbzQwejFsdDAifQ.-uuEzwv7CsbdJgDKLT6i9g',
-      accessToken: 'pk.eyJ1IjoiZ2VtZWluZGVzY2FuIiwiYSI6ImNrNXdqejRtMjAzaWwzbXBkbzQwejFsdDAifQ.-uuEzwv7CsbdJgDKLT6i9g',
-      mapStyle: 'mapbox://styles/gemeindescan/ckupq2yhy0pqe17oi2khezf9a', //mapbox://styles/gemeindescan/ckupq2yhy0pqe17oi2khezf9a
+      accessToken: import.meta.env.VITE_MAPBOX_TOKEN || '',
+      mapStyle: import.meta.env.VITE_MAPBOX_STYLE || '',
       viewState: {
         latitude: 46.92271073977435,
         longitude: 7.373082645279086,
@@ -96,7 +90,6 @@ export default {
   methods: {
     //passing a "viewstate" to the function updates mapbox
     updateViewState(viewState) {
-      console.log('updating view state...')
       this.viewState = {
         ...viewState,
       }
@@ -108,7 +101,7 @@ export default {
       })
     },
 
-    handleClick({ event, info }) {},
+    handleClick({ event, info }) { },
   },
   mounted() {
     // creating the map

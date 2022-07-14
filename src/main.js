@@ -2,13 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueCompositionApi from '@vue/composition-api'
 import vuetify from './vuetify'
-import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-//import { createPinia, PiniaVuePlugin } from 'pinia'
-
-Vue.use(VueCompositionApi, VueAxios, axios)
+Vue.use(VueCompositionApi)
 
 new Vue({
   vuetify,

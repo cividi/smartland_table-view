@@ -2,12 +2,16 @@
   <v-app id="app">
     <v-container id="deck1" fluid>
       <v-row>
-        <v-col><VueDeck :mapData="tempMapData" :SelFeature="tempSelFeature" /></v-col>
+        <v-col>
+          <VueDeck :mapData="tempMapData" :SelFeature="tempSelFeature" />
+        </v-col>
       </v-row>
     </v-container>
     <v-container id="table_container" fluid>
       <v-row>
-        <v-col><DatatableComponent @updateData="tempMapData = $event" @rowSelect="tempSelFeature = $event" /></v-col>
+        <v-col>
+          <DatatableComponent @updateData="tempMapData = $event" @rowSelect="tempSelFeature = $event" />
+        </v-col>
       </v-row>
     </v-container>
   </v-app>
@@ -17,12 +21,17 @@
 import { defineComponent } from '@vue/composition-api'
 import DatatableComponent from './components/DatatableComponent.vue'
 import VueDeck from './components/deck.vue'
+import { VApp, VContainer, VCol, VRow } from 'vuetify/lib/components'
 
 export default defineComponent({
   name: 'App',
   components: {
     DatatableComponent,
     VueDeck,
+    VApp,
+    VRow,
+    VCol,
+    VContainer,
   },
   data() {
     return {
