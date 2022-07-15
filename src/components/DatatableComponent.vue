@@ -262,6 +262,7 @@ export default {
 
     filteredParcels() {
       let conditions = []
+      let filtered = this.parcels
 
       if (this.minFlaeche) {
         conditions.push(this.filterFlaeche)
@@ -288,15 +289,14 @@ export default {
       }
 
       if (conditions.length > 0) {
-        return this.parcels.filter((parcel) => {
+        filtered = this.parcels.filter((parcel) => {
           return conditions.every((condition) => {
             return condition(parcel)
           })
         })
       }
-      //return this.parcels
-      // returns undefined if filters are applied! why?
-      return this.parcels.map((parcel, index) => ({
+      
+      return filtered.map((parcel, index) => ({
         ...parcel,
         index: index + 1,
       }))
