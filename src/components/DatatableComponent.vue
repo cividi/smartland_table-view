@@ -295,7 +295,7 @@ export default {
         })
       }
       //return this.parcels
-
+      // returns undefined if filters are applied! why?
       return this.parcels.map((parcel, index) => ({
         ...parcel,
         index: index + 1,
