@@ -4,7 +4,6 @@
       <v-card-title>
         <v-container fluid>
           <v-row>
-
             <v-col cols="4">
               <v-row class="pa-4">
                 <!-- Filter for dessert name-->
@@ -14,10 +13,7 @@
             </v-col>
 
             <v-col cols="6">
-              <v-row class="pa-4">
-
-              </v-row>
-
+              <v-row class="pa-4"> </v-row>
             </v-col>
 
             <v-col cols="2">
@@ -25,23 +21,26 @@
                 <v-btn elevation="2" @click="updateData()">Update Map</v-btn>
               </v-row>
             </v-col>
-
           </v-row>
         </v-container>
       </v-card-title>
-      <v-data-table @click:row="clickedRow" :page="page" :pageCount="numberOfPages" :headers="headers"
-        :items="filteredParcels" :loading="loading" :search="search" show-group-by class="elevation-1">
-
-
-
+      <v-data-table
+        @click:row="clickedRow"
+        :page="page"
+        :pageCount="numberOfPages"
+        :headers="headers"
+        :items="filteredParcels"
+        :loading="loading"
+        :search="search"
+        show-group-by
+        class="elevation-1"
+      >
         <template v-slot:header.Flaeche="{ header }">
           {{ header.text }}
           <v-menu offset-y :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small>
-                  mdi-filter
-                </v-icon>
+                <v-icon small> mdi-filter </v-icon>
               </v-btn>
             </template>
             <div style="background-color: white; width: 280px">
@@ -52,15 +51,12 @@
           </v-menu>
         </template>
 
-
         <template v-slot:header.nutzungspl="{ header }">
           {{ header.text }}
           <v-menu offset-y :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small>
-                  mdi-filter
-                </v-icon>
+                <v-icon small> mdi-filter </v-icon>
               </v-btn>
             </template>
             <div style="background-color: white; width: 280px">
@@ -76,15 +72,20 @@
           <v-menu offset-y :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small>
-                  mdi-filter
-                </v-icon>
+                <v-icon small> mdi-filter </v-icon>
               </v-btn>
             </template>
             <div style="background-color: white; width: 280px">
               <span class="text-h2 font-weight-light" v-text="minTot_5"></span>
-              <v-slider v-model="minTot_5" step="500" :max="20000" :min="0" dense
-                hint="Personen im Einzugsgebiet von 5min per Auto" persistent-hint></v-slider>
+              <v-slider
+                v-model="minTot_5"
+                step="500"
+                :max="20000"
+                :min="0"
+                dense
+                hint="Personen im Einzugsgebiet von 5min per Auto"
+                persistent-hint
+              ></v-slider>
             </div>
           </v-menu>
         </template>
@@ -94,16 +95,20 @@
           <v-menu offset-y :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small>
-                  mdi-filter
-                </v-icon>
+                <v-icon small> mdi-filter </v-icon>
               </v-btn>
             </template>
             <div style="background-color: white; width: 280px">
               <span class="text-h2 font-weight-light" v-text="minTot_10"></span>
-              <v-slider v-model="minTot_10" step="500" :max="50000" :min="0" dense
-                hint="Personen im Einzugsgebiet von 10min per Auto" persistent-hint></v-slider>
-
+              <v-slider
+                v-model="minTot_10"
+                step="500"
+                :max="50000"
+                :min="0"
+                dense
+                hint="Personen im Einzugsgebiet von 10min per Auto"
+                persistent-hint
+              ></v-slider>
             </div>
           </v-menu>
         </template>
@@ -113,16 +118,35 @@
           <v-menu offset-y :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small>
-                  mdi-filter
-                </v-icon>
+                <v-icon small> mdi-filter </v-icon>
               </v-btn>
             </template>
             <div style="background-color: white; width: 280px">
               <span class="text-h2 font-weight-light" v-text="minTot_15"></span>
-              <v-slider v-model="minTot_15" step="500" :max="50000" :min="0" dense
-                hint="Personen im Einzugsgebiet von 15min per Auto" persistent-hint></v-slider>
+              <v-slider
+                v-model="minTot_15"
+                step="500"
+                :max="50000"
+                :min="0"
+                dense
+                hint="Personen im Einzugsgebiet von 15min per Auto"
+                persistent-hint
+              ></v-slider>
+            </div>
+          </v-menu>
+        </template>
 
+        <template v-slot:header.validated="{ header }">
+          {{ header.text }}
+
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small> mdi-filter </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 140px">
+              <v-switch v-model="validatedOnly" label="only validated"></v-switch>
             </div>
           </v-menu>
         </template>
@@ -132,12 +156,23 @@
         </template>
 
         <template v-slot:item.rating="{ item }">
-          <v-rating v-model="item.rating" empty-icon="mdi-star-outline" full-icon="mdi-star" hover length="5" size="18"
-            color="grey" background-color="grey" dense v-on:input="rateItem(item)"></v-rating>
+          <v-rating
+            v-model="item.rating"
+            empty-icon="mdi-star-outline"
+            full-icon="mdi-star"
+            hover
+            length="5"
+            size="18"
+            color="grey"
+            background-color="grey"
+            dense
+            v-on:input="rateItem(item)"
+          ></v-rating>
         </template>
 
-
-
+        <template v-slot:item.id="{ index }">
+          {{ index + 1 }}
+        </template>
       </v-data-table>
     </v-card>
   </div>
@@ -159,6 +194,7 @@ import {
   VMenu,
   VIcon,
   VTextField,
+  VSwitch,
 } from 'vuetify/lib/components'
 
 export default {
@@ -177,6 +213,7 @@ export default {
     VSlider,
     VMenu,
     VIcon,
+    VSwitch,
   },
   data() {
     return {
@@ -185,7 +222,7 @@ export default {
       minTot_5: 0,
       minTot_10: 0,
       minTot_15: 0,
-
+      validatedOnly: false,
       geoArray: [],
       search: '',
       page: 1,
@@ -203,6 +240,7 @@ export default {
         { text: 'Einzugsgebiet 15min', value: 'ptot_15', groupable: false },
         { text: 'Validated', value: 'validated', groupable: false },
         { text: 'Rating', value: 'rating', groupable: false },
+        { text: 'id', value: 'id', groupable: false }, //not in the model, only for visual purpose, see html part
       ],
     }
   },
@@ -245,6 +283,10 @@ export default {
         conditions.push(this.filterTot_15)
       }
 
+      if (this.validatedOnly) {
+        conditions.push(this.filterValidated)
+      }
+
       if (conditions.length > 0) {
         return this.parcels.filter((parcel) => {
           return conditions.every((condition) => {
@@ -252,7 +294,12 @@ export default {
           })
         })
       }
-      return this.parcels
+      //return this.parcels
+
+      return this.parcels.map((parcel, index) => ({
+        ...parcel,
+        index: index + 1,
+      }))
     },
   },
 
@@ -285,6 +332,10 @@ export default {
     filterTot_15(item) {
       return item.ptot_15 > this.minTot_15
     },
+
+    filterValidated(item) {
+      return item.validated == this.validatedOnly
+    },
     //this will update the prop for deck
 
     updateData() {
@@ -298,18 +349,18 @@ export default {
       this.$emit('updateData', geojsonObj)
     },
 
-    async validateItem(e) {  
-        console.log(`${e.EGRIS_EGRI} is set to ${e.validated}`);
-        const { data, error } = await supabase
-          .from(this.supabaseDB)
-          .update({ validated: e.validated })
-          .match({ EGRIS_EGRI: e.EGRIS_EGRI })
-        console.log(data, error)
+    async validateItem(e) {
+      console.log(`${e.EGRIS_EGRI} is set to ${e.validated}`)
+      const { data, error } = await supabase
+        .from(this.supabaseDB)
+        .update({ validated: e.validated })
+        .match({ EGRIS_EGRI: e.EGRIS_EGRI })
+      console.log(data, error)
     },
 
     async rateItem(e) {
-      if(e.rating) {
-        console.log(`${e.EGRIS_EGRI} is now rated at ${e.rating}`);
+      if (e.rating) {
+        console.log(`${e.EGRIS_EGRI} is now rated at ${e.rating}`)
         const { data, error } = await supabase
           .from(this.supabaseDB)
           .update({ rating: e.rating })
@@ -319,16 +370,20 @@ export default {
     },
 
     clickedRow(e) {
+      this.updateData()
+
       let featuregeo = JSON.parse(e._geojson).geometry
       //console.log(featuregeo.coordinates[0][0])
 
       let longitude = featuregeo.coordinates[0][0][0]
       let latitude = featuregeo.coordinates[0][0][1]
 
-      const feature = { latitude: latitude, longitude: longitude }
+      let id = e.index
+
+      const feature = { latitude: latitude, longitude: longitude, index: id }
       this.$emit('rowSelect', feature)
 
-      console.log(e);
+      console.log(feature)
 
       // Json.parse('"{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[7.292724985126278,47.10542403346226],[7.293457995648748,47.105667138601575],[7.294181119718246,47.10482842651928],[7.294103949015508,47.10478412777309],[7.293627810481179,47.10437188033611],[7.292724985126278,47.10542403346226]]]},"properties":{}}"'
 

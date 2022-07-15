@@ -1,7 +1,12 @@
 <template>
   <div class="deck-container" ref="deckContainerRef">
-    <VueDeckgl :layers="layers" :viewState="viewState" :controller="true" @click="handleClick"
-      @view-state-change="updateViewState">
+    <VueDeckgl
+      :layers="layers"
+      :viewState="viewState"
+      :controller="true"
+      @click="handleClick"
+      @view-state-change="updateViewState"
+    >
       <template>
         <div id="map" ref="map"></div>
       </template>
@@ -35,6 +40,8 @@ export default {
         pitch: 0,
       },
 
+      featureIndex: 0,
+
       polygonData: {},
     }
   },
@@ -53,8 +60,8 @@ export default {
         getFillColor: [255, 0, 0],
         getPointRadius: 100,
         getLineWidth: 5,
-        autoHighlight: true,
-        //highlightedObjectIndex: 1,
+        autoHighlight: false,
+        highlightedObjectIndex: this.featureIndex,
         highlightColor: [255, 255, 0],
         getLineColor: [255, 0, 0, 255],
       })
@@ -82,6 +89,8 @@ export default {
         transitionDuration: 500,
       }
 
+      this.featureIndex = newVal.index - 1 //check counter, 0 or 1
+
       //this.$set(this.viewState, 'latitude', newVal.latitude) // tried with set rather dan diretly overwritng variable, no difference
       //his.$set(this.viewState, 'transitionDuration', 3000) //as soon as transition is added assertion fails
     },
@@ -101,7 +110,7 @@ export default {
       })
     },
 
-    handleClick({ event, info }) { },
+    handleClick({ event, info }) {},
   },
   mounted() {
     // creating the map
