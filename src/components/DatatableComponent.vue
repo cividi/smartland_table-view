@@ -35,6 +35,21 @@
         show-group-by
         class="elevation-1"
       >
+        <template v-slot:header.EGRIS_EGRI="{ header }">
+          {{ header.text }}
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small> mdi-filter </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <v-text-field v-model="egris" class="pa-4" type="text" label="EGRIS" :autofocus="true"> </v-text-field>
+              <v-btn @click="egris = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
+            </div>
+          </v-menu>
+        </template>
+
         <template v-slot:header.Flaeche="{ header }">
           {{ header.text }}
           <v-menu offset-y :close-on-content-click="false">
@@ -48,7 +63,7 @@
               </v-text-field>
               <v-text-field v-model="maxFlaeche" class="pa-4" type="text" label="Maximalflaeche" :autofocus="true">
               </v-text-field>
-              <v-btn @click=";(minFlaeche = 0), (maxFlaeche = 100000)" small text color="primary" class="ml-2 mb-2"
+              <v-btn @click=";(minFlaeche = 1500), (maxFlaeche = 30000)" small text color="primary" class="ml-2 mb-2"
                 >Clear</v-btn
               >
             </div>
@@ -140,6 +155,43 @@
           </v-menu>
         </template>
 
+        <template v-slot:header.Hauptverkehrsachse_direkt="{ header }">
+          {{ header.text }}
+
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small> mdi-filter </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <v-switch v-model="filter_hauptv_direkt" label="nur direkt an Hauptverkehrsachse" dense></v-switch>
+            </div>
+          </v-menu>
+        </template>
+
+        <template v-slot:header.geofit="{ header }">
+          {{ header.text }}
+
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small> mdi-filter </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <span>(AND logik. alle ausschalten um Filter zu deaktivieren)</span>
+              <v-switch v-model="shapefit_70_28" label="70 x 28m" dense></v-switch>
+              <v-switch v-model="shapefit_50_22" label="50 x 22m" dense></v-switch>
+              <v-switch v-model="shapefit_40_27" label="40 x 27m" dense></v-switch>
+              <v-switch v-model="shapefit_40_22" label="40 x 22m" dense></v-switch>
+              <v-switch v-model="shapefit_33_33" label="33 x 33m" dense></v-switch>
+            </div>
+          </v-menu>
+        </template>
+
+        <template v-slot:item.geofit="{ item }"> 70x28: {{ item.shape_check_70_28 }} </template>
+
         <template v-slot:header.validated="{ header }">
           {{ header.text }}
 
@@ -172,10 +224,6 @@
             dense
             v-on:input="rateItem(item)"
           ></v-rating>
-        </template>
-
-        <template v-slot:item.id="{ index }">
-          {{ index + 1 }}
         </template>
       </v-data-table>
     </v-card>
@@ -221,13 +269,24 @@ export default {
   },
   data() {
     return {
+      egris: '',
       parcelZone: '',
-      minFlaeche: 0,
-      maxFlaeche: 100000,
+      minFlaeche: 1500,
+      maxFlaeche: 30000,
 
       minTot_5: 0,
       minTot_10: 0,
       minTot_15: 0,
+
+      filter_hauptv_direkt: true,
+      filter_hauptv_100m: false,
+
+      shapefit_70_28: true,
+      shapefit_50_22: true,
+      shapefit_40_27: true,
+      shapefit_40_22: true,
+      shapefit_33_33: true,
+
       validatedOnly: false,
       geoArray: [],
       search: '',
@@ -244,6 +303,8 @@ export default {
         { text: 'Einzugsgebiet 5min', value: 'ptot_5', groupable: false },
         { text: 'Einzugsgebiet 10min', value: 'ptot_10', groupable: false },
         { text: 'Einzugsgebiet 15min', value: 'ptot_15', groupable: false },
+        { text: 'an Hauptverkehrsachse', value: 'Hauptverkehrsachse_direkt', groupable: false },
+        { text: 'Geometry Check', value: 'geofit', groupable: false },
         { text: 'Validated', value: 'validated', groupable: false },
         { text: 'Rating', value: 'rating', groupable: false },
         { text: 'id', value: 'id', groupable: false }, //not in the model, only for visual purpose, see html part
@@ -270,6 +331,10 @@ export default {
       let conditions = []
       let filtered = this.parcels
 
+      if (this.egris) {
+        conditions.push(this.filterEgris)
+      }
+
       if (this.minFlaeche) {
         conditions.push(this.filterminFlaeche)
       }
@@ -292,6 +357,20 @@ export default {
 
       if (this.minTot_15) {
         conditions.push(this.filterTot_15)
+      }
+
+      if (this.filter_hauptv_direkt) {
+        conditions.push(this.filterHauptverkehr)
+      }
+
+      if (
+        this.shapefit_70_28 ||
+        this.shapefit_50_22 ||
+        this.shapefit_40_27 ||
+        this.shapefit_40_22 ||
+        this.shapefit_33_33
+      ) {
+        conditions.push(this.filterShape)
       }
 
       if (this.validatedOnly) {
@@ -325,6 +404,10 @@ export default {
       this.updateData()
     },
 
+    filterEgris(item) {
+      return item.EGRIS_EGRI.toLowerCase().includes(this.egris.toLowerCase())
+    },
+
     filterminFlaeche(item) {
       return item.Flaeche > this.minFlaeche
     },
@@ -347,6 +430,20 @@ export default {
 
     filterTot_15(item) {
       return item.ptot_15 > this.minTot_15
+    },
+
+    filterHauptverkehr(item) {
+      return item.Hauptverkehrsachse_direkt == this.filter_hauptv_direkt
+    },
+
+    filterShape(item) {
+      return (
+        item.shape_check_70_28 == this.shapefit_70_28 &&
+        item.shape_check_50_22 == this.shapefit_50_22 &&
+        item.shape_check_40_27 == this.shapefit_40_27 &&
+        item.shape_check_40_22 == this.shapefit_40_22 &&
+        item.shape_check_33_33 == this.shapefit_33_33
+      )
     },
 
     filterValidated(item) {
