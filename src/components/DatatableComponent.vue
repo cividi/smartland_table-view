@@ -46,7 +46,11 @@
             <div style="background-color: white; width: 280px">
               <v-text-field v-model="minFlaeche" class="pa-4" type="text" label="Mindestflaeche" :autofocus="true">
               </v-text-field>
-              <v-btn @click="minFlaeche = 0" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
+              <v-text-field v-model="maxFlaeche" class="pa-4" type="text" label="Maximalflaeche" :autofocus="true">
+              </v-text-field>
+              <v-btn @click=";(minFlaeche = 0), (maxFlaeche = 100000)" small text color="primary" class="ml-2 mb-2"
+                >Clear</v-btn
+              >
             </div>
           </v-menu>
         </template>
@@ -219,6 +223,8 @@ export default {
     return {
       parcelZone: '',
       minFlaeche: 0,
+      maxFlaeche: 100000,
+
       minTot_5: 0,
       minTot_10: 0,
       minTot_15: 0,
@@ -265,7 +271,11 @@ export default {
       let filtered = this.parcels
 
       if (this.minFlaeche) {
-        conditions.push(this.filterFlaeche)
+        conditions.push(this.filterminFlaeche)
+      }
+
+      if (this.maxFlaeche) {
+        conditions.push(this.filtermaxFlaeche)
       }
 
       if (this.parcelZone) {
@@ -315,8 +325,12 @@ export default {
       this.updateData()
     },
 
-    filterFlaeche(item) {
+    filterminFlaeche(item) {
       return item.Flaeche > this.minFlaeche
+    },
+
+    filtermaxFlaeche(item) {
+      return item.Flaeche < this.maxFlaeche
     },
 
     filterParcelZone(item) {
