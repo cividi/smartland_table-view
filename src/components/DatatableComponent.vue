@@ -295,7 +295,7 @@ export default {
           })
         })
       }
-      
+
       return filtered.map((parcel, index) => ({
         ...parcel,
         index: index + 1,
@@ -307,8 +307,10 @@ export default {
     //Reading data from API method.
     async readDataFromAPI() {
       this.loading = true
-      const { data } = await supabase.from(this.supabaseDB).select('*')
+      const { data } = await supabase.from(this.supabaseDB).select('*') ///limit increased on supabase settings
+
       this.parcels = data
+      console.log(data)
       this.loading = false
       this.updateData()
     },
@@ -339,8 +341,8 @@ export default {
     //this will update the prop for deck
 
     updateData() {
-      this.geoArray = this.filteredParcels.map((obj) => obj._geojson)
-      // console.log(this.geoArray) //print
+      this.geoArray = this.filteredParcels.map((obj) => JSON.stringify(obj._geojson)) //stringify added as db now stores geometry as a json field
+      console.log(this.geoArray) //print
 
       let featuresString = this.geoArray.join(',') //joins array of features into feature string
       let collectionString = '{ "type": "FeatureCollection","features": [' + featuresString + ']}' //combines features into a feature collection string
@@ -371,9 +373,10 @@ export default {
 
     clickedRow(e) {
       this.updateData()
+      //console.log(e._geojson.geometry)
 
-      let featuregeo = JSON.parse(e._geojson).geometry
-      //console.log(featuregeo.coordinates[0][0])
+      //let featuregeo = JSON.parse(e._geojson).geometry
+      let featuregeo = e._geojson.geometry
 
       let longitude = featuregeo.coordinates[0][0][0]
       let latitude = featuregeo.coordinates[0][0][1]
@@ -383,7 +386,7 @@ export default {
       const feature = { latitude: latitude, longitude: longitude, index: id }
       this.$emit('rowSelect', feature)
 
-      console.log(feature)
+      //console.log(feature)
 
       // Json.parse('"{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[7.292724985126278,47.10542403346226],[7.293457995648748,47.105667138601575],[7.294181119718246,47.10482842651928],[7.294103949015508,47.10478412777309],[7.293627810481179,47.10437188033611],[7.292724985126278,47.10542403346226]]]},"properties":{}}"'
 
