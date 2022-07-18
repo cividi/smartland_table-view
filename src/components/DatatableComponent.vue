@@ -25,6 +25,7 @@
         </v-container>
       </v-card-title>
       <v-data-table
+        height="25vh"
         @click:row="clickedRow"
         :page="page"
         :pageCount="numberOfPages"
@@ -34,6 +35,7 @@
         :search="search"
         show-group-by
         class="elevation-1"
+        fixed-header
       >
         <template v-slot:header.EGRIS_EGRI="{ header }">
           {{ header.text }}
@@ -192,7 +194,34 @@
 
         <template v-slot:item.geofit="{ item }"> 70x28: {{ item.shape_check_70_28 }} </template>
 
-        <template v-slot:header.validated="{ header }">
+        <template v-slot:header.Bus_Takt_Durchschnitt="{ header }">
+          {{ header.text }}
+          <v-menu offset-y :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon small> mdi-filter </v-icon>
+              </v-btn>
+            </template>
+            <div style="background-color: white; width: 280px">
+              <span class="text-h2 font-weight-light" v-text="minAvgBusTakt"></span>
+              <v-slider
+                v-model="minAvgBusTakt"
+                step="5"
+                :max="120"
+                :min="5"
+                dense
+                hint="Minimaler ø OV Takt in Minuten"
+                persistent-hint
+              ></v-slider>
+            </div>
+          </v-menu>
+        </template>
+
+        <template v-slot:item.Bus_Takt_Durchschnitt="{ item }">
+          ø: {{ item.Bus_Takt_Durchschnitt }}m Max:{{ item.Bus_Takt_Maximal }}m
+        </template>
+
+        <template v-slot:header.valid="{ header }">
           {{ header.text }}
 
           <v-menu offset-y :close-on-content-click="false">
@@ -202,13 +231,13 @@
               </v-btn>
             </template>
             <div style="background-color: white; width: 140px">
-              <v-switch v-model="validatedOnly" label="only validated"></v-switch>
+              <v-switch v-model="validOnly" label="only valid"></v-switch>
             </div>
           </v-menu>
         </template>
 
-        <template v-slot:item.validated="{ item }">
-          <v-simple-checkbox :ripple="false" v-model="item.validated" @click="validateItem(item)"></v-simple-checkbox>
+        <template v-slot:item.valid="{ item }">
+          <v-simple-checkbox :ripple="false" v-model="item.valid" @click="validateItem(item)"></v-simple-checkbox>
         </template>
 
         <template v-slot:item.rating="{ item }">
@@ -287,7 +316,9 @@ export default {
       shapefit_40_22: true,
       shapefit_33_33: true,
 
-      validatedOnly: false,
+      minAvgBusTakt: 30,
+
+      validOnly: false,
       geoArray: [],
       search: '',
       page: 1,
@@ -305,9 +336,9 @@ export default {
         { text: 'Einzugsgebiet 15min', value: 'ptot_15', groupable: false },
         { text: 'an Hauptverkehrsachse', value: 'Hauptverkehrsachse_direkt', groupable: false },
         { text: 'Geometry Check', value: 'geofit', groupable: false },
-        { text: 'Validated', value: 'validated', groupable: false },
+        { text: 'ø OV Takt', value: 'Bus_Takt_Durchschnitt', groupable: false },
+        { text: 'Valid', value: 'valid', groupable: false },
         { text: 'Rating', value: 'rating', groupable: false },
-        { text: 'id', value: 'id', groupable: false }, //not in the model, only for visual purpose, see html part
       ],
     }
   },
@@ -373,8 +404,12 @@ export default {
         conditions.push(this.filterShape)
       }
 
-      if (this.validatedOnly) {
-        conditions.push(this.filterValidated)
+      if (this.validOnly) {
+        conditions.push(this.filterValid)
+      }
+
+      if (this.minAvgBusTakt) {
+        conditions.push(this.filterBusTakt)
       }
 
       if (conditions.length > 0) {
@@ -446,8 +481,12 @@ export default {
       )
     },
 
-    filterValidated(item) {
-      return item.validated == this.validatedOnly
+    filterBusTakt(item) {
+      return item.Bus_Takt_Durchschnitt < this.minAvgBusTakt
+    },
+
+    filterValid(item) {
+      return item.valid == this.validOnly
     },
     //this will update the prop for deck
 
@@ -463,10 +502,10 @@ export default {
     },
 
     async validateItem(e) {
-      console.log(`${e.EGRIS_EGRI} is set to ${e.validated}`)
+      console.log(`${e.EGRIS_EGRI} is set to ${e.valid}`)
       const { data, error } = await supabase
         .from(this.supabaseDB)
-        .update({ validated: e.validated })
+        .update({ valid: e.valid })
         .match({ EGRIS_EGRI: e.EGRIS_EGRI })
       console.log(data, error)
     },
