@@ -81,7 +81,7 @@ export default {
 
       //  const { latitude, longitude, pitch, bearing, zoom } = this.viewState
       this.viewState = {
-        latitude: newVal.latitude,
+        latitude: newVal.latitude - 0.002,
         longitude: newVal.longitude,
         zoom: 15,
         bearing: 0,
