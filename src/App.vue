@@ -7,7 +7,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-container id="table_container" class="ma-1 pa-1" fluid>
+    <v-container id="table_container" class="ma-1 pa-1" justify-center fluid>
       <v-row>
         <v-col>
           <DatatableComponent @updateData="tempMapData = $event" @rowSelect="tempSelFeature = $event" />
@@ -48,20 +48,24 @@ export default defineComponent({
   width: 100%;
   margin: 0 auto;
   height: 100vh;
-  z-index: 3;
+  z-index: 1;
 }
 
 #table_container {
   position: absolute;
   bottom: 0;
-  z-index: 999;
+  z-index: 3;
   height: 45vh;
+  width: 100%;
+
   overflow: hidden;
 }
 
 #app {
   display: relative;
   height: 100%;
+  width: 100%;
+
   overflow: hidden;
 }
 </style>
