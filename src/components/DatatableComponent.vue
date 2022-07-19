@@ -1,260 +1,263 @@
 <template>
-  <div class="">
+  <div>
     <v-card>
-      <v-card-title>
+      <v-card-text>
         <v-container fluid>
-          <v-row>
+          <v-row dense align="center">
             <v-col cols="4">
               <v-row class="pa-4">
                 <!-- Filter for dessert name-->
-                <span class="text-h4 font-weight-light">{{ parcelcount }}</span>
-                <span class="text-h4 font-weight-light"> &nbsp; Parzellen</span>
+                <span class="text-h5 font-weight-light">{{ parcelcount }}</span>
+                <span class="text-h5 font-weight-light"> &nbsp; Parzellen</span>
               </v-row>
             </v-col>
 
             <v-col cols="6">
               <v-row class="pa-4"> </v-row>
             </v-col>
-
             <v-col cols="2">
               <v-row class="pa-2 justify-end">
-                <v-btn elevation="2" @click="updateData()">Update Map</v-btn>
+                <v-btn elevation="2" @click="updateData()" v-size="small">Update Map</v-btn>
               </v-row>
             </v-col>
           </v-row>
         </v-container>
-      </v-card-title>
-      <v-data-table
-        height="25vh"
-        @click:row="clickedRow"
-        :page="page"
-        :pageCount="numberOfPages"
-        :headers="headers"
-        :items="filteredParcels"
-        :loading="loading"
-        :search="search"
-        show-group-by
-        class="elevation-1"
-        fixed-header
-      >
-        <template v-slot:header.EGRIS_EGRI="{ header }">
-          {{ header.text }}
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <v-text-field v-model="egris" class="pa-4" type="text" label="EGRIS" :autofocus="true"> </v-text-field>
-              <v-btn @click="egris = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
-            </div>
-          </v-menu>
-        </template>
+      </v-card-text>
+      <v-card-text>
+        <v-data-table
+          height="30vh"
+          @click:row="clickedRow"
+          :page="page"
+          :pageCount="numberOfPages"
+          :headers="headers"
+          :items="filteredParcels"
+          :loading="loading"
+          :search="search"
+          show-group-by
+          class="elevation-1"
+          fixed-header
+          single-select
+          item-key="index"
+        >
+          <template v-slot:header.EGRIS_EGRI="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <v-text-field v-model="egris" class="pa-4" type="text" label="EGRIS" :autofocus="true"> </v-text-field>
+                <v-btn @click="egris = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:header.Flaeche="{ header }">
-          {{ header.text }}
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <v-text-field v-model="minFlaeche" class="pa-4" type="text" label="Mindestflaeche" :autofocus="true">
-              </v-text-field>
-              <v-text-field v-model="maxFlaeche" class="pa-4" type="text" label="Maximalflaeche" :autofocus="true">
-              </v-text-field>
-              <v-btn @click=";(minFlaeche = 1500), (maxFlaeche = 30000)" small text color="primary" class="ml-2 mb-2"
-                >Clear</v-btn
-              >
-            </div>
-          </v-menu>
-        </template>
+          <template v-slot:header.Flaeche="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <v-text-field v-model="minFlaeche" class="pa-4" type="text" label="Mindestflaeche" :autofocus="true">
+                </v-text-field>
+                <v-text-field v-model="maxFlaeche" class="pa-4" type="text" label="Maximalflaeche" :autofocus="true">
+                </v-text-field>
+                <v-btn @click=";(minFlaeche = 1500), (maxFlaeche = 30000)" small text color="primary" class="ml-2 mb-2"
+                  >Clear</v-btn
+                >
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:header.nutzungspl="{ header }">
-          {{ header.text }}
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <v-text-field v-model="parcelZone" class="pa-4" type="text" label="Zone includes" :autofocus="true">
-              </v-text-field>
-              <v-btn @click="parcelZone = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
-            </div>
-          </v-menu>
-        </template>
+          <template v-slot:header.nutzungspl="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <v-text-field v-model="parcelZone" class="pa-4" type="text" label="Zone includes" :autofocus="true">
+                </v-text-field>
+                <v-btn @click="parcelZone = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:header.ptot_5="{ header }">
-          {{ header.text }}
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <span class="text-h2 font-weight-light" v-text="minTot_5"></span>
-              <v-slider
-                v-model="minTot_5"
-                step="500"
-                :max="20000"
-                :min="0"
-                dense
-                hint="Personen im Einzugsgebiet von 5min per Auto"
-                persistent-hint
-              ></v-slider>
-            </div>
-          </v-menu>
-        </template>
+          <template v-slot:header.ptot_5="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <span class="text-h2 font-weight-light" v-text="minTot_5"></span>
+                <v-slider
+                  v-model="minTot_5"
+                  step="500"
+                  :max="20000"
+                  :min="0"
+                  dense
+                  hint="Personen im Einzugsgebiet von 5min per Auto"
+                  persistent-hint
+                ></v-slider>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:header.ptot_10="{ header }">
-          {{ header.text }}
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <span class="text-h2 font-weight-light" v-text="minTot_10"></span>
-              <v-slider
-                v-model="minTot_10"
-                step="500"
-                :max="50000"
-                :min="0"
-                dense
-                hint="Personen im Einzugsgebiet von 10min per Auto"
-                persistent-hint
-              ></v-slider>
-            </div>
-          </v-menu>
-        </template>
+          <template v-slot:header.ptot_10="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <span class="text-h2 font-weight-light" v-text="minTot_10"></span>
+                <v-slider
+                  v-model="minTot_10"
+                  step="500"
+                  :max="50000"
+                  :min="0"
+                  dense
+                  hint="Personen im Einzugsgebiet von 10min per Auto"
+                  persistent-hint
+                ></v-slider>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:header.ptot_15="{ header }">
-          {{ header.text }}
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <span class="text-h2 font-weight-light" v-text="minTot_15"></span>
-              <v-slider
-                v-model="minTot_15"
-                step="500"
-                :max="50000"
-                :min="0"
-                dense
-                hint="Personen im Einzugsgebiet von 15min per Auto"
-                persistent-hint
-              ></v-slider>
-            </div>
-          </v-menu>
-        </template>
+          <template v-slot:header.ptot_15="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <span class="text-h2 font-weight-light" v-text="minTot_15"></span>
+                <v-slider
+                  v-model="minTot_15"
+                  step="500"
+                  :max="50000"
+                  :min="0"
+                  dense
+                  hint="Personen im Einzugsgebiet von 15min per Auto"
+                  persistent-hint
+                ></v-slider>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:header.Hauptverkehrsachse_direkt="{ header }">
-          {{ header.text }}
+          <template v-slot:header.Hauptverkehrsachse_direkt="{ header }">
+            {{ header.text }}
 
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <v-switch v-model="filter_hauptv_direkt" label="nur direkt an Hauptverkehrsachse" dense></v-switch>
-            </div>
-          </v-menu>
-        </template>
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <v-switch v-model="filter_hauptv_direkt" label="nur direkt an Hauptverkehrsachse" dense></v-switch>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:header.geofit="{ header }">
-          {{ header.text }}
+          <template v-slot:header.geofit="{ header }">
+            {{ header.text }}
 
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <span>(AND logik. alle ausschalten um Filter zu deaktivieren)</span>
-              <v-switch v-model="shapefit_70_28" label="70 x 28m" dense></v-switch>
-              <v-switch v-model="shapefit_50_22" label="50 x 22m" dense></v-switch>
-              <v-switch v-model="shapefit_40_27" label="40 x 27m" dense></v-switch>
-              <v-switch v-model="shapefit_40_22" label="40 x 22m" dense></v-switch>
-              <v-switch v-model="shapefit_33_33" label="33 x 33m" dense></v-switch>
-            </div>
-          </v-menu>
-        </template>
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <span>(AND logik. alle ausschalten um Filter zu deaktivieren)</span>
+                <v-switch v-model="shapefit_70_28" label="70 x 28m" dense></v-switch>
+                <v-switch v-model="shapefit_50_22" label="50 x 22m" dense></v-switch>
+                <v-switch v-model="shapefit_40_27" label="40 x 27m" dense></v-switch>
+                <v-switch v-model="shapefit_40_22" label="40 x 22m" dense></v-switch>
+                <v-switch v-model="shapefit_33_33" label="33 x 33m" dense></v-switch>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:item.geofit="{ item }"> 70x28: {{ item.shape_check_70_28 }} </template>
+          <template v-slot:item.geofit="{ item }"> 70x28: {{ item.shape_check_70_28 }} </template>
 
-        <template v-slot:header.Bus_Takt_Durchschnitt="{ header }">
-          {{ header.text }}
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 280px">
-              <span class="text-h2 font-weight-light" v-text="minAvgBusTakt"></span>
-              <v-slider
-                v-model="minAvgBusTakt"
-                step="5"
-                :max="120"
-                :min="5"
-                dense
-                hint="Minimaler ø OV Takt in Minuten"
-                persistent-hint
-              ></v-slider>
-            </div>
-          </v-menu>
-        </template>
+          <template v-slot:header.Bus_Takt_Durchschnitt="{ header }">
+            {{ header.text }}
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 280px">
+                <span class="text-h2 font-weight-light" v-text="minAvgBusTakt"></span>
+                <v-slider
+                  v-model="minAvgBusTakt"
+                  step="5"
+                  :max="120"
+                  :min="5"
+                  dense
+                  hint="Minimaler ø OV Takt in Minuten"
+                  persistent-hint
+                ></v-slider>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:item.Bus_Takt_Durchschnitt="{ item }">
-          ø: {{ item.Bus_Takt_Durchschnitt }}m Max:{{ item.Bus_Takt_Maximal }}m
-        </template>
+          <template v-slot:item.Bus_Takt_Durchschnitt="{ item }">
+            ø: {{ item.Bus_Takt_Durchschnitt }}m Max:{{ item.Bus_Takt_Maximal }}m
+          </template>
 
-        <template v-slot:header.valid="{ header }">
-          {{ header.text }}
+          <template v-slot:header.valid="{ header }">
+            {{ header.text }}
 
-          <v-menu offset-y :close-on-content-click="false">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon small> mdi-filter </v-icon>
-              </v-btn>
-            </template>
-            <div style="background-color: white; width: 140px">
-              <v-switch v-model="validOnly" label="only valid"></v-switch>
-            </div>
-          </v-menu>
-        </template>
+            <v-menu offset-y :close-on-content-click="false">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" v-on="on">
+                  <v-icon small> mdi-filter </v-icon>
+                </v-btn>
+              </template>
+              <div style="background-color: white; width: 140px">
+                <v-switch v-model="validOnly" label="only valid"></v-switch>
+              </div>
+            </v-menu>
+          </template>
 
-        <template v-slot:item.valid="{ item }">
-          <v-simple-checkbox :ripple="false" v-model="item.valid" @click="validateItem(item)"></v-simple-checkbox>
-        </template>
+          <template v-slot:item.valid="{ item }">
+            <v-simple-checkbox :ripple="false" v-model="item.valid" @click="validateItem(item)"></v-simple-checkbox>
+          </template>
 
-        <template v-slot:item.rating="{ item }">
-          <v-rating
-            v-model="item.rating"
-            empty-icon="mdi-star-outline"
-            full-icon="mdi-star"
-            hover
-            length="5"
-            size="18"
-            color="grey"
-            background-color="grey"
-            dense
-            v-on:input="rateItem(item)"
-          ></v-rating>
-        </template>
-      </v-data-table>
+          <template v-slot:item.rating="{ item }">
+            <v-rating
+              v-model="item.rating"
+              empty-icon="mdi-star-outline"
+              full-icon="mdi-star"
+              hover
+              length="5"
+              size="18"
+              color="grey"
+              background-color="grey"
+              dense
+              v-on:input="rateItem(item)"
+            ></v-rating>
+          </template>
+        </v-data-table>
+      </v-card-text>
     </v-card>
   </div>
 </template>
@@ -298,6 +301,8 @@ export default {
   },
   data() {
     return {
+      selectedRow: -1,
+
       egris: '',
       parcelZone: '',
       minFlaeche: 1500,
@@ -521,7 +526,7 @@ export default {
       }
     },
 
-    clickedRow(e) {
+    clickedRow(e, row) {
       this.updateData()
       //console.log(e._geojson.geometry)
 
@@ -531,10 +536,12 @@ export default {
       let longitude = featuregeo.coordinates[0][0][0]
       let latitude = featuregeo.coordinates[0][0][1]
 
-      let id = e.index
+      this.selectedRow = e.index
 
-      const feature = { latitude: latitude, longitude: longitude, index: id }
+      const feature = { latitude: latitude, longitude: longitude, index: this.selectedRow }
       this.$emit('rowSelect', feature)
+
+      row.select(true)
 
       //console.log(feature)
 
