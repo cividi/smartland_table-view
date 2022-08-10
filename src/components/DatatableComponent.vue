@@ -3,17 +3,39 @@
     <v-card>
       <v-container fluid>
         <v-row dense align="center">
-          <v-col cols="4">
+          <v-col cols="2">
             <v-row class="pa-2">
               <span class="text-h5 font-weight-light">{{ parcelcount }}</span>
               <span class="text-h5 font-weight-light"> &nbsp; Parzellen</span>
             </v-row>
           </v-col>
 
-          <v-col cols="6">
-            <v-row class="pa-2"> </v-row>
-          </v-col>
           <v-col cols="2">
+            <v-row class="pa-2">
+              <span class="text-caption font-weight-light">
+                Zone: nur Bauzone, ohne Landwirtschaft, <br />ohne Zone für öffentliche Bauten<br />
+              </span>
+            </v-row>
+          </v-col>
+
+          <v-col cols="2">
+            <v-row class="pa-2">
+              <span class="text-caption font-weight-light">
+                Fläche: grösser 1500qm, kleiner 100000qm <br />
+                Einzugsgebiet: Mind. 10000 Personen innerhalb 15min Auto<br />
+              </span>
+            </v-row>
+          </v-col>
+
+          <v-col cols="2">
+            <v-row class="pa-2">
+              <span class="text-caption font-weight-light">
+                OV: Mind. 1 Haltestelle mit <60min Taktung innerhalb 300m <br />
+                Hauptstrasse: direkt oder innerhalb 100m Offset
+              </span>
+            </v-row>
+          </v-col>
+          <v-col cols="4">
             <v-row class="pa-2 justify-end">
               <v-btn elevation="2" @click="updateData()">Update Map</v-btn>
             </v-row>
@@ -21,7 +43,7 @@
         </v-row>
       </v-container>
       <v-data-table
-        height="30vh"
+        height="33vh"
         @click:row="clickedRow"
         :page="page"
         :pageCount="numberOfPages"
@@ -164,7 +186,7 @@
                     :max="20000"
                     :min="0"
                     dense
-                    hint="Personen im Einzugsgebiet von 5min per Auto"
+                    hint="Personen im Einzugsgebiet von 5min per Auto gem. BFS StatPop"
                     persistent-hint
                   ></v-slider>
                 </div>
@@ -193,7 +215,7 @@
                     :max="50000"
                     :min="0"
                     dense
-                    hint="Personen im Einzugsgebiet von 10min per Auto"
+                    hint="Personen im Einzugsgebiet von 10min per Auto gem. BFS StatPop"
                     persistent-hint
                   ></v-slider>
                 </div>
@@ -218,11 +240,11 @@
                   <span class="text-h2 font-weight-light" v-text="minTot_15"></span>
                   <v-slider
                     v-model="minTot_15"
-                    step="500"
+                    step="10000"
                     :max="50000"
-                    :min="0"
+                    :min="10000"
                     dense
-                    hint="Personen im Einzugsgebiet von 15min per Auto"
+                    hint="Personen im Einzugsgebiet von 15min per Auto gem. BFS StatPop"
                     persistent-hint
                   ></v-slider>
                 </div>
@@ -265,7 +287,12 @@
                 </template>
                 <div style="background-color: white; width: 280px">
                   <span>(OR logik)</span>
-                  <v-switch v-model="shapefit" label="Geometrie Filter" dense></v-switch>
+                  <v-switch
+                    v-model="shapefit"
+                    label="Geometrie Filter"
+                    dense
+                    hint="Minimaler ø OV Takt in Minuten zwischen 07:00 und 19:00 der nächsten Haltestelle"
+                  ></v-switch>
                 </div>
               </v-menu>
             </th>
@@ -300,7 +327,7 @@
                     :max="120"
                     :min="5"
                     dense
-                    hint="Minimaler ø OV Takt in Minuten"
+                    hint="Minimaler ø OV Takt in Minuten zwischen 07:00 und 19:00"
                     persistent-hint
                   ></v-slider>
                 </div>
@@ -326,7 +353,7 @@
                   </v-btn>
                 </template>
                 <div style="background-color: white; width: 140px">
-                  <v-switch v-model="checkedOnly" label="only checked"></v-switch>
+                  <v-switch v-model="checkedOnly" label="nur geprüfte Parzellen"></v-switch>
                 </div>
               </v-menu>
             </th>
@@ -350,7 +377,7 @@
                   </v-btn>
                 </template>
                 <div style="background-color: white; width: 140px">
-                  <v-switch v-model="validOnly" label="only valid"></v-switch>
+                  <v-switch v-model="validOnly" label="nur valide Parzellen"></v-switch>
                 </div>
               </v-menu>
             </th>
