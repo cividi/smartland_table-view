@@ -14,24 +14,34 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <v-container id="information" class="ma-1 pa-1" justify-center fluid> </v-container>
+    <v-row>
+      <v-col>
+        <InformationComponent />
+      </v-col>
+    </v-row>
   </v-app>
 </template>
 
 <script>
 import { defineComponent } from '@vue/composition-api'
 import DatatableComponent from './components/DatatableComponent.vue'
+import InformationComponent from './components/InformationComponent.vue'
 import VueDeck from './components/deck.vue'
-import { VApp, VContainer, VCol, VRow } from 'vuetify/lib/components'
+import { VApp, VContainer, VCol, VRow, VCard } from 'vuetify/lib/components'
 
 export default defineComponent({
   name: 'App',
   components: {
     DatatableComponent,
+    InformationComponent,
     VueDeck,
     VApp,
     VRow,
     VCol,
     VContainer,
+    VCard,
   },
   data() {
     return {
@@ -61,11 +71,20 @@ export default defineComponent({
   overflow: hidden;
 }
 
+#information {
+  position: absolute;
+  top: 0;
+  z-index: 9;
+  height: 15vh;
+  width: 15vh;
+  overflow: hidden;
+  border-radius: 5%;
+}
+
 #app {
   display: relative;
   height: 100%;
   width: 100%;
-
   overflow: hidden;
 }
 </style>
