@@ -1,57 +1,26 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br />
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+  <div id="info_board" class="pa-2">
+    <h4 class="font-weight-light">
+      <strong>Harte Grundfilter:</strong>
+    </h4>
+    <p class="text-caption font-weight-light">
+      <strong>Zone:</strong> nur Bauzone, ohne Landwirtschaft, ohne Zone für öffentliche Bauten
     </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel"
-          target="_blank"
-          rel="noopener"
-          >babel</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint"
-          target="_blank"
-          rel="noopener"
-          >eslint</a
-        >
-      </li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li>
-        <a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a>
-      </li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <p class="text-caption font-weight-light"><strong>Fläche:</strong> grösser 1500qm, kleiner 100000qm</p>
+    <p class="text-caption font-weight-light">
+      <strong>Einzugsgebiet:</strong> Mind. 10000 Personen innerhalb 15min Auto
+    </p>
+    <p class="text-caption font-weight-light">
+      <strong>OV:</strong> Mind. 1 Haltestelle mit min.60min Taktung innerhalb 300m
+    </p>
+    <p class="text-caption font-weight-light"><strong>Hauptstrasse: </strong>Direkt oder innerhalb 100m Offset</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'InformationComponent',
-  props: {
-    msg: String,
-  },
+  name: 'information-component',
+  props: {},
 }
 </script>
 
@@ -71,7 +40,8 @@ li {
 a {
   color: #42b983;
 }
-body {
-  background: white;
+#info_board {
+  height: 100%;
+  width: 100%;
 }
 </style>

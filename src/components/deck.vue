@@ -60,7 +60,7 @@ export default {
         getFillColor: [255, 0, 0],
         getPointRadius: 100,
         getLineWidth: 5,
-        autoHighlight: false,
+        autoHighlight: true,
         highlightedObjectIndex: this.featureIndex,
         highlightColor: [255, 255, 0],
         getLineColor: [255, 0, 0, 255],
@@ -87,6 +87,8 @@ export default {
         bearing: 0,
         pitch: 0,
         transitionDuration: 500,
+        pickable: true,
+        touchRotate: false,
       }
 
       this.featureIndex = newVal.index - 1 //check counter, 0 or 1
