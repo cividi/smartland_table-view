@@ -72,7 +72,7 @@ export default defineComponent({
   position: absolute;
   top: 0;
   z-index: 9;
-  height: 50vh;
+  height: 40vh;
   width: 40vh;
   overflow: auto;
   background: white;
