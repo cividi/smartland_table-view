@@ -15,12 +15,9 @@
       </v-row>
     </v-container>
 
-    <v-container id="information" class="ma-1 pa-1" justify-center fluid> </v-container>
-    <v-row>
-      <v-col>
-        <InformationComponent />
-      </v-col>
-    </v-row>
+    <v-container id="information" class="ma-2 pa-2" justify-center fluid>
+      <InformationComponent />
+    </v-container>
   </v-app>
 </template>
 
@@ -75,10 +72,11 @@ export default defineComponent({
   position: absolute;
   top: 0;
   z-index: 9;
-  height: 15vh;
-  width: 15vh;
-  overflow: hidden;
-  border-radius: 5%;
+  height: 50vh;
+  width: 40vh;
+  overflow: auto;
+  background: white;
+  border-radius: 2%;
 }
 
 #app {

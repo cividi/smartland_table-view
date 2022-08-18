@@ -10,34 +10,17 @@
             </v-row>
           </v-col>
 
-          <v-col cols="2">
-            <v-row class="pa-2">
-              <span class="text-caption font-weight-light">
-                Zone: nur Bauzone, ohne Landwirtschaft, <br />ohne Zone für öffentliche Bauten<br />
-              </span>
-            </v-row>
-          </v-col>
+          <v-col cols="8"> </v-col>
 
-          <v-col cols="2">
-            <v-row class="pa-2">
-              <span class="text-caption font-weight-light">
-                Fläche: grösser 1500qm, kleiner 100000qm <br />
-                Einzugsgebiet: Mind. 10000 Personen innerhalb 15min Auto<br />
-              </span>
-            </v-row>
-          </v-col>
-
-          <v-col cols="2">
-            <v-row class="pa-2">
-              <span class="text-caption font-weight-light">
-                OV: Mind. 1 Haltestelle mit <60min Taktung innerhalb 300m <br />
-                Hauptstrasse: direkt oder innerhalb 100m Offset
-              </span>
-            </v-row>
-          </v-col>
-          <v-col cols="4">
+          <v-col cols="1">
             <v-row class="pa-2 justify-end">
-              <v-btn elevation="2" @click="updateData()">Update Map</v-btn>
+              <v-btn small elevation="2" @click="readDataFromAPI()">Refresh Data</v-btn>
+            </v-row>
+          </v-col>
+
+          <v-col cols="1">
+            <v-row class="pa-2 justify-end">
+              <v-btn small elevation="2" @click="updateData()">Update Map</v-btn>
             </v-row>
           </v-col>
         </v-row>
@@ -513,78 +496,84 @@ export default {
       return Object.keys(this.filteredParcels).length
     },
 
-    filteredParcels() {
-      let conditions = []
-      let filtered = this.parcels
+    filteredParcels: {
+      get() {
+        let conditions = []
+        var filtered = this.parcels
 
-      if (this.egris) {
-        conditions.push(this.filterEgris)
-      }
+        if (this.egris) {
+          conditions.push(this.filterEgris)
+        }
 
-      if (this.Gemeinde) {
-        conditions.push(this.filterGemeinde)
-      }
+        if (this.Gemeinde) {
+          conditions.push(this.filterGemeinde)
+        }
 
-      if (this.minFlaeche) {
-        conditions.push(this.filterminFlaeche)
-      }
+        if (this.minFlaeche) {
+          conditions.push(this.filterminFlaeche)
+        }
 
-      if (this.maxFlaeche) {
-        conditions.push(this.filtermaxFlaeche)
-      }
+        if (this.maxFlaeche) {
+          conditions.push(this.filtermaxFlaeche)
+        }
 
-      if (this.parcelZone) {
-        conditions.push(this.filterParcelZone)
-      }
+        if (this.parcelZone) {
+          conditions.push(this.filterParcelZone)
+        }
 
-      if (this.filter_RPG) {
-        conditions.push(this.filterRPG)
-      }
+        if (this.filter_RPG) {
+          conditions.push(this.filterRPG)
+        }
 
-      if (this.minTot_5) {
-        conditions.push(this.filterTot_5)
-      }
+        if (this.minTot_5) {
+          conditions.push(this.filterTot_5)
+        }
 
-      if (this.minTot_10) {
-        conditions.push(this.filterTot_10)
-      }
+        if (this.minTot_10) {
+          conditions.push(this.filterTot_10)
+        }
 
-      if (this.minTot_15) {
-        conditions.push(this.filterTot_15)
-      }
+        if (this.minTot_15) {
+          conditions.push(this.filterTot_15)
+        }
 
-      if (this.filter_hauptv_direkt) {
-        conditions.push(this.filterHauptverkehr)
-      }
+        if (this.filter_hauptv_direkt) {
+          conditions.push(this.filterHauptverkehr)
+        }
 
-      if (this.shapefit) {
-        conditions.push(this.filterShape)
-      }
+        if (this.shapefit) {
+          conditions.push(this.filterShape)
+        }
 
-      if (this.checkedOnly) {
-        conditions.push(this.filterChecked)
-      }
+        if (this.checkedOnly) {
+          conditions.push(this.filterChecked)
+        }
 
-      if (this.validOnly) {
-        conditions.push(this.filterValid)
-      }
+        if (this.validOnly) {
+          conditions.push(this.filterValid)
+        }
 
-      if (this.minAvgBusTakt) {
-        conditions.push(this.filterBusTakt)
-      }
+        if (this.minAvgBusTakt) {
+          conditions.push(this.filterBusTakt)
+        }
 
-      if (conditions.length > 0) {
-        filtered = this.parcels.filter((parcel) => {
-          return conditions.every((condition) => {
-            return condition(parcel)
+        if (conditions.length > 0) {
+          filtered = this.parcels.filter((parcel) => {
+            return conditions.every((condition) => {
+              return condition(parcel)
+            })
           })
-        })
-      }
+          console.log(filtered)
+        }
 
-      return filtered.map((parcel, index) => ({
-        ...parcel,
-        index: index + 1,
-      }))
+        return filtered.map((parcel, index) => ({
+          ...parcel,
+          index: index + 1,
+        }))
+      },
+      set(newValue) {
+        console.log('filtered parcels:' + newValue)
+      },
     },
   },
 
@@ -597,7 +586,7 @@ export default {
       const { data } = await supabase.from(this.supabaseDB).select('*,Municipalities(Gemeindename)') ///limit increased on supabase settings
 
       this.parcels = data
-      console.log(data)
+      //console.log(data)
       this.loading = false
       this.updateData()
     },
@@ -657,7 +646,7 @@ export default {
     },
 
     filterChecked(item) {
-      return item.checked == this.checkedOnly
+      return item.checked == true //this.checkedOnly
     },
 
     filterValid(item) {
@@ -683,6 +672,14 @@ export default {
         .update({ checked: e.checked })
         .match({ EGRIS_EGRI: e.EGRIS_EGRI })
       console.log(data, error)
+
+      //below updates the local parcels array-  would also work with map but more efficient with the for loop as it breaks once done
+      for (const obj of this.parcels) {
+        if (obj.EGRIS_EGRI === e.EGRIS_EGRI) {
+          obj.checked = e.checked
+          break
+        }
+      }
     },
 
     async validateItem(e) {
@@ -692,6 +689,16 @@ export default {
         .update({ valid: e.valid })
         .match({ EGRIS_EGRI: e.EGRIS_EGRI })
       console.log(data, error)
+
+      //below updates the local parcels array-  would also work with map but more efficient with the for loop as it breaks once done
+      for (const obj of this.parcels) {
+        if (obj.EGRIS_EGRI === e.EGRIS_EGRI) {
+          obj.valid = e.valid
+          break
+        }
+      }
+
+      // alternative: this.readDataFromAPI() //test -> achtung: race condition?
     },
 
     async rateItem(e) {
@@ -702,6 +709,14 @@ export default {
           .update({ rating: e.rating })
           .match({ EGRIS_EGRI: e.EGRIS_EGRI })
         console.log(data, error)
+      }
+
+      //below updates the local parcels array-  would also work with map but more efficient with the for loop as it breaks once done
+      for (const obj of this.parcels) {
+        if (obj.EGRIS_EGRI === e.EGRIS_EGRI) {
+          obj.rating = e.rating
+          break
+        }
       }
     },
 
