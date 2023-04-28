@@ -1,7 +1,7 @@
 <template>
   <div id="info_board" class="pa-2">
     <h4 class="font-weight-light">
-      <strong>Grundfilter:</strong>
+      <strong>Angewendete Grundfilter:</strong>
     </h4>
     <p class="text-caption font-weight-light">
       <strong>Zone:</strong> nur Bauzone, ohne Landwirtschaft, ohne Zone für öffentliche Bauten
