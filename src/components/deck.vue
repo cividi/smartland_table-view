@@ -33,8 +33,8 @@ export default {
       accessToken: import.meta.env.VITE_MAPBOX_TOKEN || '',
       mapStyle: import.meta.env.VITE_MAPBOX_STYLE || '',
       viewState: {
-        latitude: 46.92271073977435,
-        longitude: 7.373082645279086,
+        latitude: 48.18271073977435,
+        longitude: 7.993082645279086,
         zoom: 10,
         bearing: 0,
         pitch: 0,
@@ -83,7 +83,7 @@ export default {
       this.viewState = {
         latitude: newVal.latitude - 0.002,
         longitude: newVal.longitude,
-        zoom: 15,
+        zoom: 10,
         bearing: 0,
         pitch: 0,
         transitionDuration: 500,

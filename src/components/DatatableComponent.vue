@@ -41,31 +41,10 @@
         item-key="index"
         dense
       >
-        <template v-slot:header.EGRIS_EGRI="{ header }">
-          <thead>
-            <th>
-              {{ header.text }}
-            </th>
-            <th>
-              <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon small> mdi-filter </v-icon>
-                  </v-btn>
-                </template>
-                <div style="background-color: white; width: 280px">
-                  <v-text-field v-model="egris" class="pa-2" type="text" label="EGRIS" :autofocus="true">
-                  </v-text-field>
-                  <v-btn @click="egris = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
-                </div>
-              </v-menu>
-            </th>
-          </thead>
-        </template>
 
         <template v-slot:item.OREB="{ item }"
           ><a
-            :href="'https://www.oereb2.apps.be.ch/extract/pdf?lang=de&egrid=' + item.EGRIS_EGRI"
+            :href=""
             target="_blank"
             style="text-decoration: none"
             ><v-icon small> mdi-file </v-icon></a
@@ -246,10 +225,9 @@ export default {
 
       minHeight: 0,
 
+      filter_footprint: false,
 
-      filter_footprint: true,
-
-      validOnly: true,
+      validOnly: false,
       checkedOnly: false,
 
       geoArray: [],
@@ -265,10 +243,9 @@ export default {
         { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI', groupable: false },
         { text: 'Flaeche', value: 'land_area', groupable: false },
         { text: 'Zone Kant.', value: 'typ_kant_1', groupable: false },
-        { text: 'Zone Kommunal', value: 'typ_komm_1' },
-        { text: 'Bauphase', value: 'area_weighted_baup', groupable: false },
-        { text: 'Height 95', value: 'height_95', groupable: false },
-        { text: 'Footprint', value: 'passed_footprint_criteria', groupable: false },
+        { text: 'Zone Kommunal', value: 'typ_komm_1', groupable: false  },
+        { text: 'Erwartete Max. Höhe', value: 'height_95', groupable: false },
+        { text: '25x45m Footprint', value: 'passed_footprint_criteria', groupable: false },
         { text: 'OV Klasse', value: 'OeV_Gueteklassen_KLASSE', groupable: false },
         { text: 'Geprüft', value: 'checked', groupable: false },
         { text: 'Invalid', value: 'invalid', groupable: false },
@@ -384,7 +361,9 @@ export default {
     //this will update the prop for deck
 
     updateData() {
-      this.geoArray = this.filteredParcels.map((obj) => JSON.stringify(obj._geojson)) //stringify added as db now stores geometry as a json field
+      //this.geoArray = this.filteredParcels.map((obj) => JSON.stringify(obj._geojson)) //stringify added as db now stores geometry as a json field
+
+      this.geoArray = this.filteredParcels.map((obj) => obj._geojson.slice(1,-1)) //this is a workaround as json is stored as text with "" around
       console.log(this.geoArray) //print
 
       let featuresString = this.geoArray.join(',') //joins array of features into feature string
@@ -458,8 +437,8 @@ export default {
       this.updateData()
       //console.log(e._geojson.geometry)
 
-      //let featuregeo = JSON.parse(e._geojson).geometry
-      let featuregeo = e._geojson.geometry
+      let featuregeo = JSON.parse(e._geojson.slice(1,-1)).geometry
+      //let featuregeo = e._geojson.geometry
 
       let longitude = featuregeo.coordinates[0][0][0]
       let latitude = featuregeo.coordinates[0][0][1]
