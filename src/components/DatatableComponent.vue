@@ -10,19 +10,14 @@
             </v-row>
           </v-col>
 
-          <v-col cols="6"> </v-col>
+          <v-col cols="8"> </v-col>
 
-          <v-col cols="1">
+          <v-col cols="2">
             <v-row class="pa-2 justify-end">
               <v-btn small elevation="2" @click="readDataFromAPI()">Refresh</v-btn>
             </v-row>
           </v-col>
 
-          <v-col cols="1">
-            <v-row class="pa-2 justify-end">
-              <v-btn small elevation="2" @click="updateData()">Update Map</v-btn>
-            </v-row>
-          </v-col>
         </v-row>
       </v-container>
       <v-data-table
