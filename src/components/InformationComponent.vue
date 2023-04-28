@@ -1,19 +1,19 @@
 <template>
   <div id="info_board" class="pa-2">
     <h4 class="font-weight-light">
-      <strong>Angewendete Grundfilter:</strong>
+      <strong>Grundfilter:</strong>
     </h4>
     <p class="text-caption font-weight-light">
-      <strong>Zone:</strong> nur Bauzone, ohne Landwirtschaft, ohne Zone für öffentliche Bauten
+      <strong>Zone:</strong> Arbeitzone (harmonisiert)
     </p>
-    <p class="text-caption font-weight-light"><strong>Fläche:</strong> grösser 1500qm, kleiner 100000qm</p>
+    <p class="text-caption font-weight-light"><strong>Fläche:</strong> grösser 5000qm, kleiner 30'0000qm</p>
     <p class="text-caption font-weight-light">
       <strong>Einzugsgebiet:</strong> Mind. 10000 Personen innerhalb 15min Auto
     </p>
     <p class="text-caption font-weight-light">
-      <strong>OV:</strong> Mind. 1 Haltestelle mit min.60min Taktung innerhalb 300m
+      <strong>OV:</strong> Klasse A,B,C
     </p>
-    <p class="text-caption font-weight-light"><strong>Hauptstrasse: </strong>Direkt oder innerhalb 100m Offset</p>
+    <p class="text-caption font-weight-light"><strong>: </strong>Direkt oder innerhalb 100m Offset</p>
   </div>
 </template>
 
