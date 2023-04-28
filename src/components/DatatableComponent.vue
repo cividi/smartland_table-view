@@ -72,7 +72,10 @@
           >
         </template>
 
-        <template v-slot:header.Flaeche="{ header }">
+        
+
+
+        <template v-slot:header.height_95%="{ header }">
           <thead>
             <th>
               {{ header.text }}
@@ -85,88 +88,11 @@
                   </v-btn>
                 </template>
                 <div style="background-color: white; width: 280px">
-                  <v-text-field v-model="minFlaeche" class="pa-4" type="text" label="Mindestflaeche" :autofocus="true">
-                  </v-text-field>
-                  <v-text-field v-model="maxFlaeche" class="pa-4" type="text" label="Maximalflaeche" :autofocus="true">
-                  </v-text-field>
-                  <v-btn
-                    @click=";(minFlaeche = 1500), (maxFlaeche = 30000)"
-                    small
-                    text
-                    color="primary"
-                    class="ml-2 mb-2"
-                    >Clear</v-btn
-                  >
-                </div>
-              </v-menu>
-            </th>
-          </thead>
-        </template>
-
-        <template v-slot:header.Municipalities.Gemeindename="{ header }">
-          <thead>
-            <th>
-              {{ header.text }}
-            </th>
-            <th>
-              <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon small> mdi-filter </v-icon>
-                  </v-btn>
-                </template>
-                <div style="background-color: white; width: 280px">
-                  <v-text-field v-model="Gemeinde" class="pa-4" type="text" label="Gemeinde" :autofocus="true">
-                  </v-text-field>
-                  <v-btn @click="Gemeinde = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
-                </div>
-              </v-menu>
-            </th>
-          </thead>
-        </template>
-
-        <template v-slot:header.nutzungspl="{ header }">
-          <thead>
-            <th>
-              {{ header.text }}
-            </th>
-            <th>
-              <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon small> mdi-filter </v-icon>
-                  </v-btn>
-                </template>
-                <div style="background-color: white; width: 280px">
-                  <v-text-field v-model="parcelZone" class="pa-4" type="text" label="Zone enhält.." :autofocus="true">
-                  </v-text-field>
-                  <v-switch v-model="filter_RPG" label="ohne Art.18 Abs.1 RPG" dense></v-switch>
-
-                  <v-btn @click="parcelZone = ''" small text color="primary" class="ml-2 mb-2">Clear</v-btn>
-                </div>
-              </v-menu>
-            </th>
-          </thead>
-        </template>
-
-        <template v-slot:header.ptot_5="{ header }">
-          <thead>
-            <th>
-              {{ header.text }}
-            </th>
-            <th>
-              <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon small> mdi-filter </v-icon>
-                  </v-btn>
-                </template>
-                <div style="background-color: white; width: 280px">
-                  <span class="text-h2 font-weight-light" v-text="minTot_5"></span>
+                  <span class="text-h2 font-weight-light" v-text="minHeight"></span>
                   <v-slider
-                    v-model="minTot_5"
-                    step="500"
-                    :max="20000"
+                    v-model="minHeight"
+                    step="1"
+                    :max="30"
                     :min="0"
                     dense
                     hint="Personen im Einzugsgebiet von 5min per Auto gem. BFS StatPop"
@@ -178,7 +104,8 @@
           </thead>
         </template>
 
-        <template v-slot:header.ptot_10="{ header }">
+
+        <template v-slot:header.passed_footprint_criteria="{ header }">
           <thead>
             <th>
               {{ header.text }}
@@ -191,137 +118,16 @@
                   </v-btn>
                 </template>
                 <div style="background-color: white; width: 280px">
-                  <span class="text-h2 font-weight-light" v-text="minTot_10"></span>
-                  <v-slider
-                    v-model="minTot_10"
-                    step="500"
-                    :max="50000"
-                    :min="0"
-                    dense
-                    hint="Personen im Einzugsgebiet von 10min per Auto gem. BFS StatPop"
-                    persistent-hint
-                  ></v-slider>
+                  <v-switch v-model="filter_footprint" label="nur direkt an Hauptverkehrsachse" dense></v-switch>
                 </div>
               </v-menu>
             </th>
           </thead>
         </template>
 
-        <template v-slot:header.ptot_15="{ header }">
-          <thead>
-            <th>
-              {{ header.text }}
-            </th>
-            <th>
-              <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon small> mdi-filter </v-icon>
-                  </v-btn>
-                </template>
-                <div style="background-color: white; width: 280px">
-                  <span class="text-h2 font-weight-light" v-text="minTot_15"></span>
-                  <v-slider
-                    v-model="minTot_15"
-                    step="10000"
-                    :max="50000"
-                    :min="10000"
-                    dense
-                    hint="Personen im Einzugsgebiet von 15min per Auto gem. BFS StatPop"
-                    persistent-hint
-                  ></v-slider>
-                </div>
-              </v-menu>
-            </th>
-          </thead>
-        </template>
 
-        <template v-slot:header.Hauptverkehrsachse_direkt="{ header }">
-          <thead>
-            <th>
-              {{ header.text }}
-            </th>
-            <th>
-              <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon small> mdi-filter </v-icon>
-                  </v-btn>
-                </template>
-                <div style="background-color: white; width: 280px">
-                  <v-switch v-model="filter_hauptv_direkt" label="nur direkt an Hauptverkehrsachse" dense></v-switch>
-                </div>
-              </v-menu>
-            </th>
-          </thead>
-        </template>
 
-        <template v-slot:header.geofit="{ header }">
-          <thead>
-            <th>
-              {{ header.text }}
-            </th>
-            <th>
-              <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon small> mdi-filter </v-icon>
-                  </v-btn>
-                </template>
-                <div style="background-color: white; width: 280px">
-                  <span>(OR logik)</span>
-                  <v-switch
-                    v-model="shapefit"
-                    label="Geometrie Filter"
-                    dense
-                    hint="Minimaler ø OV Takt in Minuten zwischen 07:00 und 19:00 der nächsten Haltestelle"
-                  ></v-switch>
-                </div>
-              </v-menu>
-            </th>
-          </thead>
-        </template>
 
-        <template v-slot:item.geofit="{ item }">
-          70x28: {{ item.shape_check_70_28 }} <br />
-          50x22: {{ item.shape_check_50_22 }} <br />
-          40x27: {{ item.shape_check_40_27 }} <br />
-          40x22: {{ item.shape_check_40_22 }} <br />
-          33x33: {{ item.shape_check_33_33 }}</template
-        >
-
-        <template v-slot:header.Bus_Takt_Durchschnitt="{ header }">
-          <thead>
-            <th>
-              {{ header.text }}
-            </th>
-            <th>
-              <v-menu offset-y :close-on-content-click="false">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon small> mdi-filter </v-icon>
-                  </v-btn>
-                </template>
-                <div style="background-color: white; width: 280px">
-                  <span class="text-h2 font-weight-light" v-text="minAvgBusTakt"></span>
-                  <v-slider
-                    v-model="minAvgBusTakt"
-                    step="5"
-                    :max="60"
-                    :min="5"
-                    dense
-                    hint="Minimaler ø OV Takt in Minuten zwischen 07:00 und 19:00"
-                    persistent-hint
-                  ></v-slider>
-                </div>
-              </v-menu>
-            </th>
-          </thead>
-        </template>
-
-        <template v-slot:item.Bus_Takt_Durchschnitt="{ item }">
-          ø: {{ item.Bus_Takt_Durchschnitt }}m Max:{{ item.Bus_Takt_Maximal }}m
-        </template>
 
         <template v-slot:header.checked="{ header }">
           <thead>
@@ -436,20 +242,12 @@ export default {
       egris: '',
       Gemeinde: '',
       parcelZone: '',
-      filter_RPG: true,
 
-      minFlaeche: 1500,
-      maxFlaeche: 30000,
 
-      minTot_5: 0,
-      minTot_10: 0,
-      minTot_15: 0,
+      minHeight: 0,
 
-      filter_hauptv_direkt: true,
-      filter_hauptv_100m: false,
 
-      shapefit: true,
-      minAvgBusTakt: 30,
+      filter_footprint: true,
 
       validOnly: true,
       checkedOnly: false,
@@ -463,17 +261,15 @@ export default {
       options: {},
       supabaseDB: import.meta.env.VITE_SUPABASE_DB || '',
       headers: [
-        { text: 'OREB', value: 'OREB', groupable: false, width: '1%' },
+        { text: 'OREB', value: 'oereb_extract_url', groupable: false, width: '1%' },
         { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI', groupable: false },
-        { text: 'Gemeinde', value: 'Municipalities.Gemeindename', groupable: false },
-        { text: 'Flaeche', value: 'Flaeche', groupable: false },
-        { text: 'nutzungsplanung', value: 'nutzungspl' },
-        { text: 'Einz.geb.5m', value: 'ptot_5', groupable: false },
-        { text: 'Einz.geb.10m', value: 'ptot_10', groupable: false },
-        { text: 'Einz.geb.15m', value: 'ptot_15', groupable: false },
-        { text: 'Hauptverk.', value: 'Hauptverkehrsachse_direkt', groupable: false },
-        { text: 'Geometrie', value: 'geofit', groupable: false },
-        { text: 'øOVTakt', value: 'Bus_Takt_Durchschnitt', groupable: false },
+        { text: 'Flaeche', value: 'land_area', groupable: false },
+        { text: 'Zone Kant.', value: 'typ_kant_1', groupable: false },
+        { text: 'Zone Kommunal', value: 'typ_komm_1' },
+        { text: 'Bauphase', value: 'area_weighted_baup', groupable: false },
+        { text: 'Height 95', value: 'height_95', groupable: false },
+        { text: 'Footprint', value: 'passed_footprint_criteria', groupable: false },
+        { text: 'OV Klasse', value: 'OeV_Gueteklassen_KLASSE', groupable: false },
         { text: 'Geprüft', value: 'checked', groupable: false },
         { text: 'Invalid', value: 'invalid', groupable: false },
         { text: 'Rating', value: 'rating', groupable: false },
@@ -504,45 +300,14 @@ export default {
         if (this.egris) {
           conditions.push(this.filterEgris)
         }
+  
 
-        if (this.Gemeinde) {
-          conditions.push(this.filterGemeinde)
+        if (this.minHeight) {
+          conditions.push(this.filterHeight)
         }
 
-        if (this.minFlaeche) {
-          conditions.push(this.filterminFlaeche)
-        }
-
-        if (this.maxFlaeche) {
-          conditions.push(this.filtermaxFlaeche)
-        }
-
-        if (this.parcelZone) {
-          conditions.push(this.filterParcelZone)
-        }
-
-        if (this.filter_RPG) {
-          conditions.push(this.filterRPG)
-        }
-
-        if (this.minTot_5) {
-          conditions.push(this.filterTot_5)
-        }
-
-        if (this.minTot_10) {
-          conditions.push(this.filterTot_10)
-        }
-
-        if (this.minTot_15) {
-          conditions.push(this.filterTot_15)
-        }
-
-        if (this.filter_hauptv_direkt) {
-          conditions.push(this.filterHauptverkehr)
-        }
-
-        if (this.shapefit) {
-          conditions.push(this.filterShape)
+        if (this.filter_footprint) {
+          conditions.push(this.filterFootprint)
         }
 
         if (this.checkedOnly) {
@@ -583,7 +348,7 @@ export default {
       this.loading = true
       //const { data } = await supabase.from(this.supabaseDB).select('*') ///limit increased on supabase settings
 
-      const { data } = await supabase.from(this.supabaseDB).select('*,Municipalities(Gemeindename)') ///limit increased on supabase settings
+      const { data } = await supabase.from(this.supabaseDB).select('*') ///limit increased on supabase settings
 
       this.parcels = data
       //console.log(data)
@@ -595,55 +360,19 @@ export default {
       return item.EGRIS_EGRI.toLowerCase().includes(this.egris.toLowerCase())
     },
 
-    filterGemeinde(item) {
-      return item.Municipalities.Gemeindename.toLowerCase().includes(this.Gemeinde.toLowerCase())
+
+
+
+    filterHeight(item) {
+      return height_95 > this.minHeight
     },
 
-    filterminFlaeche(item) {
-      return item.Flaeche > this.minFlaeche
+
+    filterFootprint(item) {
+      return item.passed_footprint_criteria == this.filter_footprint
     },
 
-    filtermaxFlaeche(item) {
-      return item.Flaeche < this.maxFlaeche
-    },
 
-    filterParcelZone(item) {
-      return item.nutzungspl.toLowerCase().includes(this.parcelZone.toLowerCase())
-    },
-
-    filterRPG(item) {
-      return !item.Art18_ausserhalb_Bauzone == this.filter_RPG
-    },
-
-    filterTot_5(item) {
-      return item.ptot_5 > this.minTot_5
-    },
-
-    filterTot_10(item) {
-      return item.ptot_10 > this.minTot_10
-    },
-
-    filterTot_15(item) {
-      return item.ptot_15 > this.minTot_15
-    },
-
-    filterHauptverkehr(item) {
-      return item.Hauptverkehrsachse_direkt == this.filter_hauptv_direkt
-    },
-
-    filterShape(item) {
-      return (
-        item.shape_check_70_28 == this.shapefit ||
-        item.shape_check_50_22 == this.shapefit ||
-        item.shape_check_40_27 == this.shapefit ||
-        item.shape_check_40_22 == this.shapefit ||
-        item.shape_check_33_33 == this.shapefit
-      )
-    },
-
-    filterBusTakt(item) {
-      return item.Bus_Takt_Durchschnitt < this.minAvgBusTakt
-    },
 
     filterChecked(item) {
       return item.checked == true //this.checkedOnly
