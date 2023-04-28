@@ -325,7 +325,7 @@ export default {
       this.loading = true
       //const { data } = await supabase.from(this.supabaseDB).select('*') ///limit increased on supabase settings
 
-      const { data } = await supabase.from(this.supabaseDB).select('*') ///limit increased on supabase settings
+      const { data } = await supabase.from("parcel_teresa").select('*') ///limit increased on supabase settings
 
       this.parcels = data
       //console.log(data)
@@ -363,7 +363,7 @@ export default {
     updateData() {
       //this.geoArray = this.filteredParcels.map((obj) => JSON.stringify(obj._geojson)) //stringify added as db now stores geometry as a json field
 
-      this.geoArray = this.filteredParcels.map((obj) => obj._geojson.slice(1,-1)) //this is a workaround as json is stored as text with "" around
+      this.geoArray = this.filteredParcels.map((obj) => obj._geojson) //this is a workaround as json is stored as text with "" around
       console.log(this.geoArray) //print
 
       let featuresString = this.geoArray.join(',') //joins array of features into feature string
@@ -437,7 +437,7 @@ export default {
       this.updateData()
       //console.log(e._geojson.geometry)
 
-      let featuregeo = JSON.parse(e._geojson.slice(1,-1)).geometry
+      let featuregeo = JSON.parse(e._geojson).geometry
       //let featuregeo = e._geojson.geometry
 
       let longitude = featuregeo.coordinates[0][0][0]
