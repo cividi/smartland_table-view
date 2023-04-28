@@ -44,7 +44,7 @@
 
         <template v-slot:item.OREB="{ item }"
           ><a
-            :href=""
+            :href="oereb_extract_url"
             target="_blank"
             style="text-decoration: none"
             ><v-icon small> mdi-file </v-icon></a
@@ -74,7 +74,7 @@
                     :max="30"
                     :min="0"
                     dense
-                    hint="Personen im Einzugsgebiet von 5min per Auto gem. BFS StatPop"
+                    hint="95% der Gebäude in der selben Zone sind bis zu x Meter hoch"
                     persistent-hint
                   ></v-slider>
                 </div>
