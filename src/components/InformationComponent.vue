@@ -1,19 +1,23 @@
 <template>
   <div id="info_board" class="pa-2">
     <h4 class="font-weight-light">
-      <strong>Grundfilter:</strong>
+      <strong>Standortsuche Haefeliareal</strong>
     </h4>
     <p class="text-caption font-weight-light">
-      <strong>Zone:</strong> Arbeitzone (harmonisiert)
-    </p>
-    <p class="text-caption font-weight-light"><strong>Fläche:</strong> grösser 5000qm, kleiner 30'0000qm</p>
-    <p class="text-caption font-weight-light">
-      <strong>Einzugsgebiet:</strong> Mind. 10000 Personen innerhalb 15min Auto
+      <strong>Lage:</strong> Innerhalb 9KM vom heutigen Standort
     </p>
     <p class="text-caption font-weight-light">
-      <strong>OV:</strong> Klasse A,B,C
+      <strong>Zone:</strong> Arbeitzone (Industrie/Gewerbe)
     </p>
-    <p class="text-caption font-weight-light"><strong>: </strong>Direkt oder innerhalb 100m Offset</p>
+    <p class="text-caption font-weight-light"><strong>Fläche:</strong> mind. 5000qm Footprint (Setback 5m)</p>
+    <p class="text-caption font-weight-light">
+      <strong>Gebäude:</strong> Unbebaut oder mehrheitlich* vor 1990 erbaut (*gewichtet nach Baumasse)
+    </p>
+    <p class="text-caption font-weight-light">
+      <strong>ÖV Güteklasse:</strong> A,B,C
+    </p>
+    <p class="text-caption font-weight-light"><strong>Geometrie: </strong>Gebäude 25x45m</p>
+    <p class="text-caption font-weight-light"><strong>Gebäudehöhe: </strong>25m (indikativ, basierend auf der max Höhe des 95% Percentils aller Gebäude in der selben Bauzone)</p>
   </div>
 </template>
 
@@ -37,6 +41,11 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
+p {
+    line-height: 1.0;
+    margin-top: 1px;
+    margin-bottom: 1px;
+  }
 a {
   color: #42b983;
 }

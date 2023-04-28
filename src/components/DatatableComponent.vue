@@ -10,11 +10,11 @@
             </v-row>
           </v-col>
 
-          <v-col cols="8"> </v-col>
+          <v-col cols="6"> </v-col>
 
           <v-col cols="1">
             <v-row class="pa-2 justify-end">
-              <v-btn small elevation="2" @click="readDataFromAPI()">Refresh Data</v-btn>
+              <v-btn small elevation="2" @click="readDataFromAPI()">Refresh</v-btn>
             </v-row>
           </v-col>
 
@@ -42,9 +42,9 @@
         dense
       >
 
-        <template v-slot:item.OREB="{ item }"
+        <template v-slot:item.oereb_extract_url="{ item }"
           ><a
-            :href="oereb_extract_url"
+            :href=item.oereb_extract_url
             target="_blank"
             style="text-decoration: none"
             ><v-icon small> mdi-file </v-icon></a
@@ -71,7 +71,7 @@
                   <v-slider
                     v-model="minHeight"
                     step="1"
-                    :max="30"
+                    :max="40"
                     :min="0"
                     dense
                     hint="95% der Gebäude in der selben Zone sind bis zu x Meter hoch"
@@ -241,10 +241,10 @@ export default {
       headers: [
         { text: 'OREB', value: 'oereb_extract_url', groupable: false, width: '1%' },
         { text: 'EGRIS_EGRI', value: 'EGRIS_EGRI', groupable: false },
-        { text: 'Flaeche', value: 'land_area', groupable: false },
+        { text: 'Flaeche m2', value: 'land_area', groupable: false },
         { text: 'Zone Kant.', value: 'typ_kant_1', groupable: false },
         { text: 'Zone Kommunal', value: 'typ_komm_1', groupable: false  },
-        { text: 'Erwartete Max. Höhe', value: 'height_95', groupable: false },
+        { text: 'Gebäudehöhe (95%)', value: 'height_95', groupable: false },
         { text: '25x45m Footprint', value: 'passed_footprint_criteria', groupable: false },
         { text: 'OV Klasse', value: 'OeV_Gueteklassen_KLASSE', groupable: false },
         { text: 'Geprüft', value: 'checked', groupable: false },
@@ -295,9 +295,6 @@ export default {
           conditions.push(this.filterValid)
         }
 
-        if (this.minAvgBusTakt) {
-          conditions.push(this.filterBusTakt)
-        }
 
         if (conditions.length > 0) {
           filtered = this.parcels.filter((parcel) => {
@@ -341,7 +338,7 @@ export default {
 
 
     filterHeight(item) {
-      return height_95 > this.minHeight
+      return item.height_95 > this.minHeight
     },
 
 
