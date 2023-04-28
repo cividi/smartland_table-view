@@ -54,7 +54,7 @@
         
 
 
-        <template v-slot:header.height_95%="{ header }">
+        <template v-slot:header.height_95="{ header }">
           <thead>
             <th>
               {{ header.text }}
@@ -97,7 +97,7 @@
                   </v-btn>
                 </template>
                 <div style="background-color: white; width: 280px">
-                  <v-switch v-model="filter_footprint" label="nur direkt an Hauptverkehrsachse" dense></v-switch>
+                  <v-switch v-model="filter_footprint" label="Filter" dense></v-switch>
                 </div>
               </v-menu>
             </th>
@@ -325,7 +325,7 @@ export default {
       this.loading = true
       //const { data } = await supabase.from(this.supabaseDB).select('*') ///limit increased on supabase settings
 
-      const { data } = await supabase.from("parcel_teresa").select('*') ///limit increased on supabase settings
+      const { data } = await supabase.from(this.supabaseDB).select('*') ///limit increased on supabase settings
 
       this.parcels = data
       //console.log(data)
