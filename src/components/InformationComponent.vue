@@ -17,7 +17,7 @@
       <strong>ÖV Güteklasse:</strong> A,B,C
     </p>
     <p class="text-caption font-weight-light"><strong>Geometrie: </strong>Gebäude 25x45m</p>
-    <p class="text-caption font-weight-light"><strong>Gebäudehöhe: </strong>25m (indikativ, basierend auf der max Höhe des 95% Percentils aller Gebäude in der selben Bauzone)</p>
+    <p class="text-caption font-weight-light"><strong>Gebäudehöhe: </strong>25m (indikativ, basierend auf der max Höhe des 95% Percentils aller Gebäude in der gleichen Bauzone)</p>
   </div>
 </template>
 
